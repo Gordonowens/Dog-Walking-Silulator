@@ -9,6 +9,7 @@ from queue import PriorityQueue
 from Player import Player
 from NPC import NPC
 from Grid import*
+from NPCAway import *
 
 
 def make_grid(width):
@@ -31,6 +32,11 @@ def make_grid(width):
             elif(tilemap[j][i] == "P"):
                 node = Node(i, j, gap, len(tilemap), GREY)
                 PLAYER.append(Player(gameGrid, node))
+                grid[i].append(node)
+
+            elif(tilemap[j][i] == "A"):
+                node = Node(i, j, gap, len(tilemap), BLUE)
+                ENEMY.append(NPCAway(gameGrid, node))
                 grid[i].append(node)
 
 
@@ -82,10 +88,12 @@ def main():
                         for node in row:
                             node.update_neighbors(grid.getGrid())
 
-                    #ENEMY[0].updatePath(algorithm(grid, ENEMY[0].getNode(), PLAYER[0].getNode()))
+
 
         PLAYER[0].update()
-        ENEMY[0].update()
+        for i in ENEMY:
+            i.update()
+
 
 
     pygame.quit()

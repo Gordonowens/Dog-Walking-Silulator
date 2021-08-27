@@ -1,4 +1,5 @@
 from queue import PriorityQueue
+import numpy as np
 
 def h(p1, p2):
     x1, y1 = p1
@@ -55,3 +56,68 @@ def algorithm(grid, start, end):
             current.make_closed()
 
     return []
+
+
+def getGridSquare(pos, size, grid):
+    '''
+    slices a list and returns a square around a position
+    :param pos: (int, int) tuple at the centre of the square
+    :param size: int size of the square. how many rows and columns out
+    :param grid: 2d list [[]]
+    :return: 2d list
+    '''
+    #set to numpy array
+    grid = np.array(grid)
+
+    # need to update grid[ax]
+    # get upper square co-ordinates
+    ax = pos[0] - size
+    ay = pos[0] + size + 1
+
+    # get lower square co-ordinates
+    bx = pos[1] - size
+    by = pos[1] + size + 1
+
+
+    # check if upper left square inbounds
+    if (ax < 0 and bx < 0):
+        return grid[0:ay, 0:by].tolist()
+
+    # check if upper right square inbounds
+    elif (ax < 0 and by > len(grid[ax])):
+
+        return grid[0:ay, bx:len(grid[ax])].tolist()
+
+    #check if lower left is in bounds
+    elif (ay > len(grid) and bx < 0):
+
+        return grid[ax:len(grid), 0: by].tolist()
+
+    #check if lower right is in bounds
+    elif (ay > len(grid) and by > len(grid[ax])):
+
+        return grid[ax:len(grid), bx: len(grid[ax])].tolist()
+
+    #upper
+    elif(ax < 0):
+        print("upper")
+        return grid[0:ay, bx:by].tolist()
+
+    #left
+    elif(bx < 0):
+        print("left")
+        return grid[ax:ay, 0:by].tolist()
+
+    #lower
+    elif(ax > len(grid)):
+        print("lower")
+        return grid[len(grid):ay, bx:by].tolist()
+
+    #right
+    elif(bx > len(grid[ax])):
+        print("right")
+        return grid[ax:ay, 0:by].tolist()
+
+    else:
+        print("return")
+        return grid[ax:ay, bx:by].tolist()
