@@ -1,47 +1,84 @@
 # from sprites import *
 from config import *
+from algorithms import *
+from Node import *
 
-class Player():
-    def __init__(self, grid, node):
+class Player(Node):
+    def __init__(self, grid, row, col, width, total_rows, spriteSheet):
+
+
+
+        Node.__init__(self, row, col, width, total_rows, spriteSheet)
+        self._layer = 2
+        self.image = self.createSprite(spriteSheet, 3, 2, width, width)
 
         self.grid = grid
-        self.node = node
 
     def update(self):
-        self.movement()
-
-    def getNode(self):
-        return self.node
-
-    def movement(self):
-
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
-            self.node.reset()
-            #get node
-            self.node = self.grid.getGrid()[self.node.get_pos()[0]][self.node.get_pos()[1] - 1]
-            self.node.make_player()
+            nextNode = [self.row, self.col - 1]
+
+            if self.grid.getGrid()[nextNode[0]][nextNode[1]] not in BARRIER:
+
+                #update grid
+                #update player position
+                self.updatePosition(nextNode)
+                #update node
 
         elif keys[pygame.K_DOWN]:
-            self.node.reset()
-            # get node
+            nextNode = [self.row, self.col + 1]
 
-            self.node = self.grid.getGrid()[self.node.get_pos()[0]][self.node.get_pos()[1] + 1]
-            self.node.make_player()
+            if self.grid.getGrid()[nextNode[0]][nextNode[1]] not in BARRIER:
+                # update players previous position
+                # update player position
+                self.updatePosition(nextNode)
+                # update node
 
         elif keys[pygame.K_LEFT]:
-            self.node.reset()
-            # get node
+            nextNode = [self.row - 1, self.col]
 
-            self.node = self.grid.getGrid()[self.node.get_pos()[0] - 1][self.node.get_pos()[1]]
-            self.node.make_player()
+            if self.grid.getGrid()[nextNode[0]][nextNode[1]] not in BARRIER:
+                # update players previous position
+                # update player position
+                self.updatePosition(nextNode)
+                # update node
 
         elif keys[pygame.K_RIGHT]:
-            self.node.reset()
-            # get node
+            nextNode = [self.row + 1, self.col]
 
-            self.node = self.grid.getGrid()[self.node.get_pos()[0] + 1][self.node.get_pos()[1]]
-            self.node.make_player()
+            if self.grid.getGrid()[nextNode[0]][nextNode[1]] not in BARRIER:
+                # update players previous position
+                # update player position
+                self.updatePosition(nextNode)
+                # update node
+
+        keys_pressed = pygame.event.get()  # pygame.event.get(pygame.KEYDOWN)
+        # print(keys_pressed)
+        for event in keys_pressed:
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+
+                for i in ENEMY:
+                    i.toggleState()
+
+
+
+            # create sphere of influence
+            '''
+            for i in getGridSquare(self.node.get_pos(), 4, self.grid.getGrid()):
+                for j in i:
+                    if j.get_color() == WHITE:
+                        print(j)
+                        j.make_light_blue()
+                        '''
+
+
+
+
+
+
+
 
 
 

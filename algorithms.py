@@ -4,6 +4,7 @@ import numpy as np
 def h(p1, p2):
     x1, y1 = p1
     x2, y2 = p2
+    print(abs(x1 - x2) + abs(y1 - y2))
     return abs(x1 - x2) + abs(y1 - y2)
 
 def reconstruct_path(came_from, current):
@@ -12,7 +13,10 @@ def reconstruct_path(came_from, current):
         current = came_from[current]
         path.append(current)
 
+    #print("hello", path)
     return path
+
+
 
 
 def algorithm(grid, start, end):

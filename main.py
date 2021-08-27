@@ -5,94 +5,95 @@ import sys
 from Node import Node
 import math
 from queue import PriorityQueue
-
+from Barrier import *
 from Player import Player
 from NPC import NPC
 from Grid import*
 from NPCAway import *
+from NPCHangAround import *
+from Animal import *
+from Ground import *
 
 
-def make_grid(width):
+def make_grid(width, spriteGroup, spriteSheets):
     grid = []
     gameGrid = Grid([])
-    gap = width // len(tilemap)
+    gap = 30
+
     for i in range(len(tilemap)):
         grid.append([])
         for j in range(len(tilemap)):
+            node = Ground(i, j, gap, len(tilemap), spriteSheets[1])
+            spriteGroup.add(node)
             if(tilemap[j][i] == "B"):
-                node = Node(i, j, gap, len(tilemap), BLACK)
+                node = Barrier(i, j, gap, len(tilemap), spriteSheets[1])
                 grid[i].append(node)
-
-            elif(tilemap[j][i] == "E"):
-                node = Node(i, j, gap, len(tilemap), YELLOW)
-
-                ENEMY.append(NPC(gameGrid, node))
-                grid[i].append(node)
-
-            elif(tilemap[j][i] == "P"):
-                node = Node(i, j, gap, len(tilemap), GREY)
-                PLAYER.append(Player(gameGrid, node))
-                grid[i].append(node)
+                spriteGroup.add(node)
+                BARRIER.append(node)
 
             elif(tilemap[j][i] == "A"):
-                node = Node(i, j, gap, len(tilemap), BLUE)
-                ENEMY.append(NPCAway(gameGrid, node))
-                grid[i].append(node)
+                node = Animal(i, j, gap, len(tilemap), gameGrid, spriteSheets[2])
+                grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
+                spriteGroup.add(node)
+                ENEMY.append(node)
 
+            elif (tilemap[j][i] == "P"):
+
+                node = Player(gameGrid, i, j, gap, len(tilemap), spriteSheets[0])
+                grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
+                spriteGroup.add(node)
+                PLAYER.append(node)
 
             else:
-                node = Node(i, j, gap, len(tilemap))
+                node = Node(i, j, gap, len(tilemap), spriteSheets[0])
                 grid[i].append(node)
+                #spriteGroup.add(node)
+
+            #print(grid)
+
 
         gameGrid.setGrid(grid)
-        #print(grid)
+    #print(grid)
+
     return gameGrid
 
 
-def draw(win, grid, width):
-    win.fill(WHITE)
-
-    for row in grid:
-        for node in row:
-            node.draw(win)
-
-    draw_grid(win, width)
-    pygame.display.update()
 
 
-def draw_grid(win, width):
-    gap = width // len(tilemap)
-    for i in range(len(tilemap)):
-        pygame.draw.line(win, GREY, (0, i * gap), (width, i * gap))
-        for j in range(len(tilemap)):
-            pygame.draw.line(win, GREY, (j * gap, 0), (j * gap, width))
 
 
 def main():
-    grid = make_grid(WIDTH)
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, WIDTH))
+    #sprite sheets go character, terrain, enemy
+    spriteSheets = []
+    spriteSheets.append(pygame.image.load('img/character.png').convert())
+    spriteSheets.append(pygame.image.load('img/terrain.png').convert())
+    spriteSheets.append(pygame.image.load('img/dogs.jpg').convert())
+    clock = pygame.time.Clock()
 
+    all_sprites = pygame.sprite.LayeredUpdates()
 
-    start = None
-    end = None
+    #create grid
+    make_grid(WIDTH, all_sprites, spriteSheets)
 
-    run = True
-    while run:
-        draw(WIN, grid.getGrid(), WIDTH)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
+    #game loop
+    running = True
+    while running:
+        for butt in pygame.event.get():
+            if butt.type == pygame.QUIT:
+                print('quit game')
+                running = False
+                pygame.quit()
+                sys.exit()
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    for row in grid.getGrid():
-                        for node in row:
-                            node.update_neighbors(grid.getGrid())
+        clock.tick(FPS)
+        screen.fill(BLACK)
+        all_sprites.update()
+        all_sprites.draw(screen)
+        pygame.display.update()
+        pygame.display.flip()
 
-
-
-        PLAYER[0].update()
-        for i in ENEMY:
-            i.update()
 
 
 
