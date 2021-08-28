@@ -60,14 +60,18 @@ class Player(Node):
                     if self.grid.getGrid()[nextNode[0]][nextNode[1]] not in BARRIER:
                         self.updatePosition(nextNode)
 
-                #space
+                #space come here
                 elif event.key == pygame.K_SPACE:
                     for dog in ENEMY:
-                        dog.toggleFollowState()
+                        dog.playerCommand = 'follow'
 
                 elif event.key == pygame.K_LCTRL:
                     for dog in ENEMY:
-                        dog.makeFleeState()
+                        dog.playerCommand = 'flee'
+
+                elif event.key == pygame.K_s:
+                    for dog in ENEMY:
+                        dog.playerCommand = 'stay'
 
 
                     # create sphere of influence

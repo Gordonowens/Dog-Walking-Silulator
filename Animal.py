@@ -28,6 +28,7 @@ class Animal(Node):
         self.animalState = 'stay'
         self.direction = 0
         self.grid = grid
+        self.playerCommand = ''
 
 
     def makeFleeState(self):
@@ -66,27 +67,64 @@ class Animal(Node):
 
     def update(self):
         '''
-        handles
+        this function handles moving the animal between states
+        no other function can change the animal's state
         '''
 
         #do nothing if in stay state
         if self.animalState == 'stay':
-            return
+            if self.playerCommand == 'flee':
+                self.animalState = 'flee'
+                self.playerCommand = ''
 
-        elif self.animalState == 'flee' and len(self.path) == 0:
-            if (h(self.get_pos(), PLAYER[0].get_pos()) < 5):
+            elif self.playerCommand == 'follow':
+                self.animalState = 'follow'
+                self.playerCommand = ''
+
+            elif self.playerCommand == 'stay':
+                self.animalState = 'stay'
+                self.playerCommand = ''
+
+        elif self.animalState == 'flee':
+            #change state if appropriote
+            if self.playerCommand == 'follow':
+                self.animalState = 'follow'
+                self.playerCommand = ''
+
+            #else if animal is far enough from player do nothing
+            elif (h(self.get_pos(), PLAYER[0].get_pos()) > 5):
+                self.path = []
+
+            #else if animal still has places to move move
+            elif len(self.path) > 0:
+                self.movement()
+
+            #else if player is too close find a place to move to
+            elif (h(self.get_pos(), PLAYER[0].get_pos()) < 5):
                 self.runAway()
-            else:
-                print('stay')
 
-        # animal is still following path
-        elif len(self.path) > 0:
-            self.movement()
+        elif self.animalState == 'follow':
+            #change state if appropriote
+            if self.playerCommand == 'stay':
+                self.animalState = 'stay'
+                self.playerCommand = ''
 
-        elif ((h(self.get_pos(), PLAYER[0].get_pos()) < 10) and
-              (h(self.get_pos(), PLAYER[0].get_pos()) > 5) and
-              (self.animalState == 'follow')):
-            self.come(PLAYER[0])
+            # change state if appropriote
+            elif self.playerCommand == 'flee':
+                self.animalState = 'flee'
+                self.playerCommand = ''
+
+            #if player is within 4 spaces of animal do nothing
+            elif h(self.get_pos(), PLAYER[0].get_pos()) < 4:
+                self.path = []
+
+            #if there are still spaces to move in the path - then move
+            elif len(self.path) > 0:
+                self.movement()
+
+            #if player is over 4 spaces away from animal then create a path to player
+            elif h(self.get_pos(), PLAYER[0].get_pos())  > 4:
+                self.come(PLAYER[0])
 
         #update rectangle of sprite, x,y refers to upper left corner of sprite box
         self.rect.x = self.pos.x
