@@ -65,7 +65,11 @@ class Player(Node):
 
                 elif event.key == pygame.K_SPACE:
                     for dog in ENEMY:
-                        dog.toggleState()
+                        dog.toggleFollowState()
+
+                elif event.key == pygame.K_LCTRL:
+                    for dog in ENEMY:
+                        dog.makeFleeState()
 
 
                     # create sphere of influence

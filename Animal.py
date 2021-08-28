@@ -19,8 +19,12 @@ class Animal(Node):
         self.grid = grid
 
 
+    def makeFleeState(self):
 
-    def toggleState(self):
+        self.animalState = 'flee'
+
+
+    def toggleFollowState(self):
         if self.animalState == 'stay':
             self.animalState = 'follow'
             self.come(PLAYER[0])
@@ -43,6 +47,12 @@ class Animal(Node):
 
         if self.animalState == 'stay':
             return
+
+        elif self.animalState == 'flee' and len(self.path) == 0:
+            if (h(self.get_pos(), PLAYER[0].get_pos()) < 5):
+                self.runAway()
+            else:
+                print('stay')
 
         # animal is still following path
         elif len(self.path) > 0:
@@ -82,3 +92,19 @@ class Animal(Node):
                 node.update_neighbors(self.grid.getGrid())
 
         self.path = algorithm(self.grid.getGrid(), self.grid.getGrid()[self.row][self.col], self.grid.getGrid()[toNode.row][toNode.col])
+
+    def runAway(self):
+        #get sphere of influence
+        bestNode = None
+        bestDist = 8
+        for i in getGridSquare(self.get_pos(), 5, self.grid.getGrid()):
+            for j in i:
+                if j not in BARRIER and j not in PLAYER:
+
+                    if h(j.get_pos(), PLAYER[0].get_pos()) > bestDist:
+
+                        bestNode = j
+                        bestDist = h(j.get_pos(), PLAYER[0].get_pos())
+
+        if bestNode != None:
+            self.come(bestNode)
