@@ -1,25 +1,45 @@
 from queue import PriorityQueue
 import numpy as np
 
+
 def h(p1, p2):
+    '''
+    gets distance from one point to another does not care about barriers
+    :(int, int) p1: point one
+    :(int, int) p2: point two
+    '''
     x1, y1 = p1
     x2, y2 = p2
-    #print(abs(x1 - x2) + abs(y1 - y2))
     return abs(x1 - x2) + abs(y1 - y2)
 
 def reconstruct_path(came_from, current):
+    '''
+    gets output from pathfinding algorithms and puts best path into list
+    :list came_from:
+    :node current: node
+    :return: list of grid co-ordinates #[end, node, node, start]
+    '''
     path = []
     while current in came_from:
         current = came_from[current]
         path.append(current)
 
-    #print("hello", path)
     return path
 
 
 
 
 def algorithm(grid, start, end):
+    '''
+    astar pathfinding algorithm
+    :nested list [[]] grid: contains nodes to be traversed by algorithm
+    :node start: starting node
+    :node end: goal node
+    :return: list containing co-ordinates for best path, if no path can be calculated
+    returns an empty list []
+    '''
+
+    #set up date structures
     count = 0
     open_set = PriorityQueue()
     open_set.put((0, count, start))
@@ -28,19 +48,21 @@ def algorithm(grid, start, end):
     g_score[start] = 0
     f_score = {spot: float("inf") for row in grid for spot in row}
     f_score[start] = h(start.get_pos(), end.get_pos())
-
     open_set_hash = {start}
 
+    #begin traversing nodes in grid
     while not open_set.empty():
 
+        #get best node
         current = open_set.get()[2]
         open_set_hash.remove(current)
 
+        #end has been found
         if current == end:
-            #ENEMY[0].updatePath(reconstruct_path(came_from, end))
-            #end.make_end()
+            #get best path from start to end and return
             return reconstruct_path(came_from, end)
 
+        #iterate through neighbours of current node and test scores
         for neighbor in current.neighbors:
             temp_g_score = g_score[current] + 1
 
@@ -48,17 +70,17 @@ def algorithm(grid, start, end):
                 came_from[neighbor] = current
                 g_score[neighbor] = temp_g_score
                 f_score[neighbor] = temp_g_score + h(neighbor.get_pos(), end.get_pos())
+
                 if neighbor not in open_set_hash:
                     count += 1
                     open_set.put((f_score[neighbor], count, neighbor))
                     open_set_hash.add(neighbor)
                     neighbor.make_open()
 
-
-
         if current != start:
             current.make_closed()
 
+    #path has not been found return empty list
     return []
 
 

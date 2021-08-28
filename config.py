@@ -1,10 +1,13 @@
 import pygame
 
+#width of game screen
 WIDTH = 800
 FPS = 30
-
 PLAYER_SPEED = 4
+#how big sprite box is
+GAP = 30
 
+#set colors
 RED = (253, 255, 230)
 GREEN = (253, 255, 231)
 BLUE = (0, 255, 0)
@@ -12,22 +15,20 @@ YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
 LIGHTBLUE = (4, 157, 253)
 PINK = (255,192,203)
-vec = pygame.math.Vector2
 BLACK = (0, 0, 0)
 PURPLE = (128, 0, 128)
 ORANGE = (255, 165, 0)
 GREY = (128, 128, 128)
 TURQUOISE = (64, 224, 208)
 
+#lists for storing nodes
 BARRIER = []
 ENEMY = []
 PLAYER = []
 
+vec = pygame.math.Vector2
 
-
-
-#must be equal sides
-
+#tilemaps must be equal sides
 tilemap1 = ['BBBBB',
            'BA.BB',
            'B...B',
