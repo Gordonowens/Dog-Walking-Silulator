@@ -80,12 +80,6 @@ def main():
     #game loop
     running = True
     while running:
-        for butt in pygame.event.get():
-            if butt.type == pygame.QUIT:
-                print('quit game')
-                running = False
-                pygame.quit()
-                sys.exit()
 
         clock.tick(FPS)
         screen.fill(BLACK)
@@ -100,4 +94,6 @@ def main():
     pygame.quit()
 
 
-main()
+if __name__ == "__main__":
+    main()
+
