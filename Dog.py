@@ -2,11 +2,13 @@ from Animal import *
 
 class Dog(Animal):
 
-    def __init__(self, row, col, width, total_rows, grid, spriteSheet, time):
+    def __init__(self, row, col, width, total_rows, grid, spriteSheet, ):
 
         Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet)
-        self.time = time
+
         self.recordTime = 0
+        self.coolDown = 5
+        self.coolDownTimer = 5
 
     def stateReset(self):
         '''resets path and player command when transfering between states'''
@@ -14,11 +16,14 @@ class Dog(Animal):
         self.path = []
         self.playerCommand = ''
 
+
     def update(self):
         '''
         this function handles moving the dog between states
         no other function can change the dog's state
         '''
+
+        self.coolDownTimer = self.coolDownTimer - 1
 
         #do nothing if in stay state
         if self.animalState == 'stay':
@@ -41,19 +46,21 @@ class Dog(Animal):
                 self.animalState = 'follow'
                 self.stateReset()
 
-
             #else if animal is far enough from player change state to flee sniff
             elif (h(self.get_pos(), PLAYER[0].get_pos()) > 5):
                 self.animalState = 'flee sniff'
                 self.stateReset()
 
             #else if animal still has places to move move
-            elif len(self.path) > 0:
+            elif len(self.path) > 0 and self.coolDownTimer <= 0:
+
                 self.movement()
+                self.coolDownTimer = self.coolDown
 
             #else if player is too close find a place to move to
-            elif (h(self.get_pos(), PLAYER[0].get_pos()) < 5):
+            elif (h(self.get_pos(), PLAYER[0].get_pos()) < 5) and len(self.path) <= 0:
                 self.runAway()
+
 
         elif self.animalState =='flee sniff':
 
@@ -68,9 +75,10 @@ class Dog(Animal):
 
                 self.stateReset()
 
-            else:
+            elif self.coolDownTimer <= 0:
                 self.randomMove()
                 self.movement()
+                self.coolDownTimer = self.coolDown
 
 
         elif self.animalState == 'follow':
@@ -90,10 +98,11 @@ class Dog(Animal):
                 self.stateReset()
 
             #if there are still spaces to move in the path - then move
-            elif len(self.path) > 0:
+            elif len(self.path) > 0 and  self.coolDownTimer <= 0:
+                self.coolDownTimer = self.coolDown
                 self.movement()
 
-            else:
+            elif len(self.path) <= 0:
                 self.come(PLAYER[0])
 
         elif self.animalState == 'follow sniff':
@@ -111,13 +120,14 @@ class Dog(Animal):
                 self.stateReset()
 
             #if player is more than 4 spaces from dog change state to follow
-            elif h(self.get_pos(), PLAYER[0].get_pos())  > 4:
+            elif h(self.get_pos(), PLAYER[0].get_pos()) > 4:
                 self.animalState = 'follow'
                 self.stateReset()
 
-            else:
+            elif self.coolDownTimer <= 0:
                 self.randomMove()
                 self.movement()
+                self.coolDownTimer = self.coolDown
 
         #update rectangle of sprite, x,y refers to upper left corner of sprite box
         self.rect.x = self.pos.x
@@ -125,7 +135,7 @@ class Dog(Animal):
 
     def randomMove(self):
 
-        #self.recordTime
+
         self.direction = randrange(4)
 
         if self.direction == 0:
