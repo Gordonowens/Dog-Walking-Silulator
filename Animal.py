@@ -22,7 +22,6 @@ class Animal(Node):
 
     def toggleState(self):
         if self.animalState == 'stay':
-
             self.animalState = 'follow'
             self.come(PLAYER[0])
         else:
@@ -39,22 +38,22 @@ class Animal(Node):
 
     def update(self):
 
-        print(self.animalState)
+
         # animal in stay state do nothing
 
         if self.animalState == 'stay':
             return
 
-        elif (h(self.get_pos(), PLAYER[0].get_pos())  < 2) and (self.state == 'follow'):
-            self.come(PLAYER[0])
-
         # animal is still following path
         elif len(self.path) > 0:
             self.movement()
 
-        else:
-            self.animalState = 'stay'
-            self.path = []
+        elif ((h(self.get_pos(), PLAYER[0].get_pos()) < 10) and
+              (h(self.get_pos(), PLAYER[0].get_pos()) > 5) and
+              (self.animalState == 'follow')):
+            self.come(PLAYER[0])
+            #self.movement()
+
 
 
 
@@ -64,7 +63,7 @@ class Animal(Node):
 
 
     def movement(self):
-        #print(len(self.path))
+
         if len(self.path) == 0:
             self.path = []
 
