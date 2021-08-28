@@ -13,9 +13,10 @@ from NPCAway import *
 from NPCHangAround import *
 from Animal import *
 from Ground import *
+from Dog import *
 
 
-def make_grid(width, spriteGroup, spriteSheets, gap):
+def make_grid(width, spriteGroup, spriteSheets, gap, clock):
     '''
     this function iterates through the tilemap and generates sprites
     and creates game grid for pathfinding
@@ -49,6 +50,14 @@ def make_grid(width, spriteGroup, spriteSheets, gap):
             elif(tilemap[j][i] == "A"):
                 node = Animal(i, j, gap, len(tilemap), gameGrid, spriteSheets[2])
                 #append a general node to gamegrid for pathfinding
+                grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
+                spriteGroup.add(node)
+                ENEMY.append(node)
+
+                # create animal sprite
+            elif (tilemap[j][i] == "D"):
+                node = Dog(i, j, gap, len(tilemap), gameGrid, spriteSheets[2], clock)
+                # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
                 ENEMY.append(node)
@@ -92,7 +101,7 @@ def main():
     all_sprites = pygame.sprite.LayeredUpdates()
 
     #create grid, creates all the game sprites and characters
-    make_grid(WIDTH, all_sprites, spriteSheets, GAP)
+    make_grid(WIDTH, all_sprites, spriteSheets, GAP, clock)
 
     #game loop
     running = True
