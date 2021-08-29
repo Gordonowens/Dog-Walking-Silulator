@@ -20,6 +20,7 @@ def reconstruct_path(came_from, current):
     :return: list of grid co-ordinates #[end, node, node, start]
     '''
     path = []
+    path.append(current)
     while current in came_from:
         current = came_from[current]
         path.append(current)

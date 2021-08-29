@@ -51,7 +51,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
 
             #create animal sprite
             elif(tilemap[j][i] == "A"):
-                node = Animal(i, j, gap, len(tilemap), gameGrid, spriteSheets[2])
+                node = Animal(i, j, gap, len(tilemap), gameGrid, spriteSheets[2], spriteGroup)
                 #append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
@@ -63,7 +63,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
-                BALL.append(node)
+                ITEMS.append(node)
 
                 # create Treebottom sprite
             elif (tilemap[j][i] == "t"):
@@ -83,7 +83,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
 
                 # create animal sprite
             elif (tilemap[j][i] == "D"):
-                node = Dog(i, j, gap, len(tilemap), gameGrid, spriteSheets[2])
+                node = Dog(i, j, gap, len(tilemap), gameGrid, spriteSheets[2], spriteGroup)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
@@ -91,7 +91,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
 
             #create player
             elif (tilemap[j][i] == "P"):
-                node = Player(gameGrid, i, j, gap, len(tilemap), spriteSheets[0])
+                node = Player(gameGrid, i, j, gap, len(tilemap), spriteSheets[0], spriteGroup)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)

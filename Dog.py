@@ -1,14 +1,17 @@
 from Animal import *
+from config import *
 
 class Dog(Animal):
 
-    def __init__(self, row, col, width, total_rows, grid, spriteSheet, ):
+    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup):
 
-        Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet)
+        Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup)
 
         self.recordTime = 0
         self.coolDown = 5
         self.coolDownTimer = 5
+        self.goal = None
+        self.items = []
 
     def stateReset(self):
         '''resets path and player command when transfering between states'''
@@ -139,29 +142,44 @@ class Dog(Animal):
 
     def fetchState(self):
         #get location of ball
-        if len(self.path) <= 0 and BALL[0].get_pos() != self.get_pos():
-            self.come(BALL[0])
+
+        if self.goal not in ITEMS:
+            self.animalState = 'follow'
+            self.stateReset()
+            self.goal = None
+
+        elif len(self.path) <= 0:
+            self.come(self.goal)
+            pass
 
         # if there are still spaces to move in the path - then move
         elif len(self.path) > 0 and self.coolDownTimer <= 0:
             self.coolDownTimer = self.coolDown
             self.movement()
 
-        elif h(self.get_pos(), BALL[0].get_pos()) <= 1:
+        elif self.get_pos() == self.goal.get_pos():
+            self.pickUp()
             self.animalState = 'return ball'
             self.stateReset()
 
     def returnBallState(self):
+
+        #if dog is near player drop ball and change state to follow
+        if h(self.get_pos(), PLAYER[0].get_pos()) <=1:
+            self.dropItem(self, self.items[0])
+            self.animalState = 'follow'
+            self.stateReset()
+            self.items = []
+
+
         # if there are still spaces to move in the path - then move
-        if len(self.path) > 0 and self.coolDownTimer <= 0:
+        elif len(self.path) > 0 and self.coolDownTimer <= 0:
             self.coolDownTimer = self.coolDown
             self.movement()
 
         #create path
         elif len(self.path) <= 0:
             self.come(PLAYER[0])
-
-
 
     def update(self):
         '''
@@ -225,3 +243,18 @@ class Dog(Animal):
 
             if nextNode not in BARRIER:
                 self.path.append(nextNode)
+
+    def pickUp(self):
+        for i, item in enumerate(ITEMS):
+            if item.get_pos() == self.get_pos():
+                #add item to dictionary
+                self.items.append(item)
+                #remove from game
+                ITEMS.pop(i)
+                item.kill()
+
+    def dropItem(self, node, item):
+        #update items position
+        item.updatePosition(node.get_pos())
+        self.spriteGroup.add(item)
+        ITEMS.append(item)

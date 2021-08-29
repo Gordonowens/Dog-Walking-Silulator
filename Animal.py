@@ -16,7 +16,7 @@ follow: if player is over 5 paces away move to the player
 flee: if player is 5 paces away, move away
 '''
 class Animal(Node):
-    def __init__(self, row, col, width, total_rows, grid, spriteSheet):
+    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup):
 
         Node.__init__(self, row, col, width, total_rows, spriteSheet)
         self._layer = 3
@@ -29,6 +29,7 @@ class Animal(Node):
         self.direction = 0
         self.grid = grid
         self.playerCommand = ''
+        self.spriteGroup = spriteGroup
 
 
     def makeFleeState(self):
