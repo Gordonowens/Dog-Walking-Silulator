@@ -73,6 +73,10 @@ class Player(Node):
                     for dog in ENEMY:
                         dog.playerCommand = 'stay'
 
+                elif event.key == pygame.K_t:
+                    for dog in ENEMY:
+                        dog.playerCommand = 'fetch'
+
 
                     # create sphere of influence
                     '''

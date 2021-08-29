@@ -14,6 +14,9 @@ from NPCHangAround import *
 from Animal import *
 from Ground import *
 from Dog import *
+from Ball import *
+from TreeBottom import *
+from TreeTop import *
 
 
 def make_grid(width, spriteGroup, spriteSheets, gap, clock):
@@ -54,6 +57,30 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 spriteGroup.add(node)
                 ENEMY.append(node)
 
+            # create tennis ball sprite
+            elif (tilemap[j][i] == "Q"):
+                node = Ball(i, j, gap, len(tilemap), spriteSheets[3])
+                # append a general node to gamegrid for pathfinding
+                grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
+                spriteGroup.add(node)
+                BALL.append(node)
+
+                # create Treebottom sprite
+            elif (tilemap[j][i] == "t"):
+                node = TreeTop(i, j, gap, len(tilemap), spriteSheets[1])
+                # barrier gets added to gamegrid for pathfinding
+                grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
+                spriteGroup.add(node)
+                ENEMY.append(node)
+
+            # create Treebottom sprite
+            elif (tilemap[j][i] == "T"):
+                node = TreeBottom(i, j, gap, len(tilemap), spriteSheets[1])
+                # barrier gets added to gamegrid for pathfinding
+                grid[i].append(node)
+                spriteGroup.add(node)
+                BARRIER.append(node)
+
                 # create animal sprite
             elif (tilemap[j][i] == "D"):
                 node = Dog(i, j, gap, len(tilemap), gameGrid, spriteSheets[2])
@@ -93,6 +120,7 @@ def main():
     spriteSheets.append(pygame.image.load('img/character.png').convert())
     spriteSheets.append(pygame.image.load('img/terrain.png').convert())
     spriteSheets.append(pygame.image.load('img/dogs.jpg').convert())
+    spriteSheets.append(pygame.image.load('img/tennis ball.png').convert())
 
     #set the game clock
     clock = pygame.time.Clock()

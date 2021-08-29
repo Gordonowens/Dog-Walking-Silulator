@@ -134,14 +134,10 @@ class Animal(Node):
         '''
         moves animal one step along path
         '''
-        if len(self.path) == 0:
-            return
 
-        else:
+        if len(self.path) > 0:
             self.node = self.path.pop()
             self.updatePosition(self.node.get_pos())
-
-
 
     def come(self, toNode):
         '''
