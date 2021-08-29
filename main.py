@@ -17,6 +17,7 @@ from Dog import *
 from Ball import *
 from TreeBottom import *
 from TreeTop import *
+from Squirrel import *
 
 
 def make_grid(width, spriteGroup, spriteSheets, gap, clock):
@@ -80,10 +81,19 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 grid[i].append(node)
                 spriteGroup.add(node)
                 BARRIER.append(node)
+                TREES.append(node)
 
-                # create animal sprite
+            # create dog sprite
             elif (tilemap[j][i] == "D"):
                 node = Dog(i, j, gap, len(tilemap), gameGrid, spriteSheets[2], spriteGroup)
+                # append a general node to gamegrid for pathfinding
+                grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
+                spriteGroup.add(node)
+                ENEMY.append(node)
+
+            # create squirrel sprite
+            elif (tilemap[j][i] == "S"):
+                node = Squirrel(i, j, gap, len(tilemap), gameGrid, spriteSheets[4], spriteGroup)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
@@ -121,6 +131,8 @@ def main():
     spriteSheets.append(pygame.image.load('img/terrain.png').convert())
     spriteSheets.append(pygame.image.load('img/dogs.jpg').convert())
     spriteSheets.append(pygame.image.load('img/tennis ball.png').convert())
+    spriteSheets.append(pygame.image.load('img/squirrel.png').convert())
+
 
     #set the game clock
     clock = pygame.time.Clock()

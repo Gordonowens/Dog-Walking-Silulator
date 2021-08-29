@@ -9,4 +9,4 @@ class TreeBottom(Barrier):
         self._layer = 2
         self.image = self.createSprite(spriteSheet, 780, 335, width, width)
         self.color = BLACK
-        self.state = 'barrier'
+        self.state = ''
