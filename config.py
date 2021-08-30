@@ -22,17 +22,13 @@ GREY = (128, 128, 128)
 TURQUOISE = (64, 224, 208)
 
 #lists for storing nodes
-BARRIER = []
-ENEMY = []
-PLAYER = []
-ITEMS = []
-TREES = []
+
 
 vec = pygame.math.Vector2
 
 #tilemaps must be equal sides
-tilemap1 = ['BBBBB',
-           'BA.BB',
+tilemap = ['BBBBB',
+           'BQ.BB',
            'B...B',
            'BB.PB',
            'BBBBB']
@@ -46,7 +42,7 @@ tilemap1 = ['B.',
            'B.']
 
 
-tilemap = [
+tilemap1 = [
     'BBBBBBBBBBBBBBBBBBBBBBB',
     'B.....................B',
     'B...........T.........B',

@@ -33,6 +33,15 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
     grid = []
     gameGrid = Grid([])
 
+    dogs = []
+    barriers = []
+    animals = []
+    items = []
+    trees = []
+    squirrels = []
+
+    iteractionCharacters = {}
+
     #iterate over tile map and generate sprites and gamegrid
     for i in range(len(tilemap)):
         grid.append([])
@@ -48,7 +57,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 #barrier gets added to gamegrid for pathfinding
                 grid[i].append(node)
                 spriteGroup.add(node)
-                BARRIER.append(node)
+                barriers.append(node)
 
             #create animal sprite
             elif(tilemap[j][i] == "A"):
@@ -56,7 +65,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 #append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
-                ENEMY.append(node)
+                animals.append(node)
 
             # create tennis ball sprite
             elif (tilemap[j][i] == "Q"):
@@ -64,7 +73,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
-                ITEMS.append(node)
+                items.append(node)
 
                 # create Treebottom sprite
             elif (tilemap[j][i] == "t"):
@@ -72,7 +81,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 # barrier gets added to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
-                ENEMY.append(node)
+                trees.append(node)
 
             # create Treebottom sprite
             elif (tilemap[j][i] == "T"):
@@ -80,8 +89,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 # barrier gets added to gamegrid for pathfinding
                 grid[i].append(node)
                 spriteGroup.add(node)
-                BARRIER.append(node)
-                TREES.append(node)
+                trees.append(node)
 
             # create dog sprite
             elif (tilemap[j][i] == "D"):
@@ -89,7 +97,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
-                ENEMY.append(node)
+                dogs.append(node)
 
             # create squirrel sprite
             elif (tilemap[j][i] == "S"):
@@ -97,23 +105,28 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
-                ENEMY.append(node)
+                squirrels.append(node)
 
             #create player
             elif (tilemap[j][i] == "P"):
-                node = Player(gameGrid, i, j, gap, len(tilemap), spriteSheets[0], spriteGroup)
+                node = Player(gameGrid, i, j, gap, len(tilemap), spriteSheets[0], spriteGroup, iteractionCharacters)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
-                PLAYER.append(node)
+                player = node
 
             else:
                 node = Node(i, j, gap, len(tilemap), spriteSheets[0])
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(node)
 
-        #update gamegrid object
-        gameGrid.setGrid(grid)
+    #update gamegrid object
+    gameGrid.setGrid(grid)
+
+    iteractionCharacters.update({'Player': player})
+    iteractionCharacters.update({'Dogs': dogs})
+    iteractionCharacters.update({'Barriers': barriers})
+    iteractionCharacters.update({'Items': items})
 
 def main():
     #initialise pygam
