@@ -115,11 +115,6 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
         #update gamegrid object
         gameGrid.setGrid(grid)
 
-
-
-
-
-
 def main():
     #initialise pygam
     pygame.init()
