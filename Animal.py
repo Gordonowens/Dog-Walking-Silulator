@@ -4,6 +4,7 @@ from config import *
 from algorithms import *
 import sys
 from random import randrange
+from BasicSprite import *
 
 '''
 basic animal
@@ -15,10 +16,10 @@ stay: do nothing
 follow: if player is over 5 paces away move to the player
 flee: if player is 5 paces away, move away
 '''
-class Animal(Node):
+class Animal(BasicSprite):
     def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters):
 
-        Node.__init__(self, row, col, width, total_rows, spriteSheet)
+        BasicSprite.__init__(self, row, col, width, total_rows, spriteSheet)
         self._layer = 3
         self.image = self.createSprite(spriteSheet, 26, 101, 26, 35)
 
@@ -36,19 +37,6 @@ class Animal(Node):
     def makeFleeState(self):
 
         self.animalState = 'flee'
-
-
-    def toggleFollowState(self):
-        '''
-        when called will toggle between stay and follow
-        :
-        '''
-        if self.animalState == 'stay':
-            self.animalState = 'follow'
-            self.come(PLAYER[0])
-        else:
-            self.animalState = 'stay'
-            self.path = []
 
     def get_sprite(self, x, y, width, height):
         '''
@@ -93,8 +81,12 @@ class Animal(Node):
                 self.animalState = 'follow'
                 self.playerCommand = ''
 
+            elif self.playerCommand == 'stay':
+                self.animalState = 'stay'
+                self.playerCommand = ''
+
             #else if animal is far enough from player do nothing
-            elif (h(self.get_pos(), PLAYER[0].get_pos()) > 5):
+            elif (h(self.get_pos(), self.characters['Player'].get_pos()) > 5):
                 self.path = []
 
             #else if animal still has places to move move
@@ -102,7 +94,7 @@ class Animal(Node):
                 self.movement()
 
             #else if player is too close find a place to move to
-            elif (h(self.get_pos(), PLAYER[0].get_pos()) < 5):
+            elif (h(self.get_pos(), self.characters['Player'].get_pos()) < 5):
                 self.runAway()
 
         elif self.animalState == 'follow':
@@ -117,7 +109,7 @@ class Animal(Node):
                 self.playerCommand = ''
 
             #if player is within 4 spaces of animal do nothing
-            elif h(self.get_pos(), PLAYER[0].get_pos()) < 4:
+            elif h(self.get_pos(), self.characters['Player'].get_pos()) < 4:
                 self.path = []
 
             #if there are still spaces to move in the path - then move
@@ -125,8 +117,8 @@ class Animal(Node):
                 self.movement()
 
             #if player is over 4 spaces away from animal then create a path to player
-            elif h(self.get_pos(), PLAYER[0].get_pos())  > 4:
-                self.come(PLAYER[0])
+            elif h(self.get_pos(), self.characters['Player'].get_pos())  > 4:
+                self.come(self.characters['Player'])
 
         #update rectangle of sprite, x,y refers to upper left corner of sprite box
         self.rect.x = self.pos.x
@@ -164,16 +156,98 @@ class Animal(Node):
         bestDist = 8
 
         #iterate through sliced out grid
-        for i in getGridSquare(self.get_pos(), 5, self.grid.getGrid()):
+        for row in getGridSquare(self.get_pos(), 5, self.grid.getGrid()):
 
-            for j in i:
-                if j not in self.characters.get('Barriers') and j != self.characters.get('Player'):
+            for node in row:
+
+                if not self.checkNodes('Barriers', node.get_pos()) and node.get_pos() != self.characters.get('Player').get_pos():
                     #if distance of node is better update
-                    if h(j.get_pos(), self.characters.get('Player').get_pos()) > bestDist:
+                    if h(node.get_pos(), self.characters.get('Player').get_pos()) > bestDist:
 
-                        bestNode = j
-                        bestDist = h(j.get_pos(), self.characters.get('Player').get_pos())
+                        bestNode = node
+                        bestDist = h(node.get_pos(), self.characters.get('Player').get_pos())
 
         #a good node has been found update animals path to it
         if bestNode != None:
             self.come(bestNode)
+
+
+    def randomMove(self):
+
+
+        self.direction = randrange(4)
+
+        if self.direction == 0:
+            #nextNode = self.grid.getGrid()[self.get_pos()[0]][self.get_pos()[1] - 1]
+            nextNode = self.grid.getGrid()[self.row][self.col - 1]
+
+            if not self.checkNodes('Barriers', (self.row, self.col - 1)):
+                self.path.append(nextNode)
+
+        elif self.direction == 1:
+            nextNode = self.grid.getGrid()[self.row][self.col + 1]
+
+            if not self.checkNodes('Barriers', (self.row, self.col + 1)):
+                self.path.append(nextNode)
+
+        elif self.direction == 2:
+
+            nextNode = self.grid.getGrid()[self.row - 1][self.col]
+
+            if not self.checkNodes('Barriers', (self.row - 1, self.col)):
+                self.path.append(nextNode)
+
+        elif self.direction == 3:
+            nextNode = self.grid.getGrid()[self.row + 1][self.col]
+
+            if not self.checkNodes('Barriers', (self.row + 1, self.col)):
+                self.path.append(nextNode)
+
+    def pickUp(self):
+        for i, item in enumerate(self.characters.get('Items')):
+            if item.get_pos() == self.get_pos():
+                #add item to dictionary
+                self.items.append(item)
+
+                # remove from interactive characters item list
+                self.removeCharacter('Items', i)
+                # remove item sprite from sprite group
+                item.kill()
+
+    def dropItem(self, node, item):
+        #update items position
+        item.updatePosition(node.get_pos())
+        self.spriteGroup.add(item)
+
+        # add item sprite back into the game
+        self.spriteGroup.add(item)
+
+        # add the character back into the game
+        self.addCharcter('Items', item)
+
+    def removeCharacter(self, characterType, position):
+        tempArray = self.characters.get(characterType)
+        tempArray.pop(position)
+        self.characters.update({characterType: tempArray})
+
+
+
+    def addCharcter(self, characterType, character):
+        #get the specific array from the interactive characters dictionary
+        tempArray = self.characters.get(characterType)
+
+        #add character to array
+        tempArray.append(character)
+        #update characters dictionary
+        self.characters.update({characterType: tempArray})
+
+    def checkNodes(self, characterType, position):
+
+        nodeState = False
+
+        for character in self.characters.get(characterType):
+            if character.get_pos() == position:
+                nodeState = True
+                break
+
+        return nodeState

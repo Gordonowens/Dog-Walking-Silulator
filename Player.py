@@ -6,15 +6,16 @@ from Node import *
 from random import randrange
 import sys
 from Ball import *
+from Animal import *
 
 '''
 this class runs player controls
 all inputs from user are handled by this class
 '''
-class Player(Node):
+class Player(Animal):
     def __init__(self, grid, row, col, width, total_rows, spriteSheet, spriteGroup, characters):
 
-        Node.__init__(self, row, col, width, total_rows, spriteSheet)
+        Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters)
         #sprite layer
         self._layer = 2
         self.image = self.createSprite(spriteSheet, 3, 2, width, width)
@@ -22,35 +23,6 @@ class Player(Node):
         self.items = []
         self.spriteGroup = spriteGroup
         self.characters = characters
-
-    def pickUp(self):
-        for i, item in enumerate(self.characters.get('Items')):
-            if item.get_pos() == self.get_pos():
-                #add items to players dictrionary
-                self.items.append(item)
-
-                #remove from interactive characters item list
-                self.removeCharacter('Items', i)
-                #remove item sprite from sprite group
-                item.kill()
-
-    def removeCharacter(self, characterType, position):
-        tempArray = self.characters.get(characterType)
-        tempArray.pop(position)
-        self.characters.update({characterType: tempArray})
-
-
-
-    def addCharcter(self, characterType, character):
-        #get the specific array from the interactive characters dictionary
-        tempArray = self.characters.get(characterType)
-
-        #add character to array
-        tempArray.append(character)
-        #update characters dictionary
-        self.characters.update({characterType: tempArray})
-
-
 
     def throw(self):
 
@@ -75,17 +47,6 @@ class Player(Node):
 
         return 0
 
-    def dropItem(self, node, item):
-
-        #update item's position
-        item.updatePosition(node.get_pos())
-
-        #add item sprite back into the game
-        self.spriteGroup.add(item)
-
-        #add the character back into the game
-        self.addCharcter('Items', item)
-
     def update(self):
         '''
         this class deals with user inputs for moving player character and interacting
@@ -104,28 +65,28 @@ class Player(Node):
                 if event.key == pygame.K_UP:
                     nextNode = [self.row, self.col - 1]
 
-                    if self.grid.getGrid()[nextNode[0]][nextNode[1]] not in self.characters.get('Barriers'):
+                    if not self.checkNodes('Barriers', (self.row, self.col - 1)):
                         self.updatePosition(nextNode)
 
                 #down
                 elif event.key == pygame.K_DOWN:
                     nextNode = [self.row, self.col + 1]
 
-                    if self.grid.getGrid()[nextNode[0]][nextNode[1]] not in self.characters.get('Barriers'):
+                    if not self.checkNodes('Barriers', (self.row, self.col + 1)):
                         self.updatePosition(nextNode)
 
                 #left
                 elif event.key == pygame.K_LEFT:
                     nextNode = [self.row - 1, self.col]
 
-                    if self.grid.getGrid()[nextNode[0]][nextNode[1]] not in self.characters.get('Barriers'):
+                    if not self.checkNodes('Barriers', (self.row -1, self.col)):
                         self.updatePosition(nextNode)
 
                 #right
                 elif event.key == pygame.K_RIGHT:
                     nextNode = [self.row + 1, self.col]
 
-                    if self.grid.getGrid()[nextNode[0]][nextNode[1]] not in self.characters.get('Barriers'):
+                    if not self.checkNodes('Barriers', (self.row + 1, self.col)):
                         self.updatePosition(nextNode)
 
                 #space come here

@@ -49,6 +49,10 @@ class Dog(Animal):
             self.animalState = 'fetch'
             self.stateReset()
 
+        elif self.playerCommand == 'stay':
+            self.animalState = 'stay'
+            self.stateReset()
+
         # else if animal is far enough from player change state to flee sniff
         elif (h(self.get_pos(), self.characters.get('Player').get_pos()) > 5):
             self.animalState = 'flee sniff'
@@ -68,6 +72,10 @@ class Dog(Animal):
         # if player is less than 5 blocks away change state to flee
         if (h(self.get_pos(), self.characters.get('Player').get_pos()) < 5):
             self.animalState = 'flee'
+            self.stateReset()
+
+        elif self.playerCommand == 'stay':
+            self.animalState = 'stay'
             self.stateReset()
 
         elif self.playerCommand == 'follow':
@@ -216,69 +224,3 @@ class Dog(Animal):
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y
 
-    def randomMove(self):
-
-
-        self.direction = randrange(4)
-
-        if self.direction == 0:
-            nextNode = self.grid.getGrid()[self.get_pos()[0]][self.get_pos()[1] - 1]
-            if nextNode not in self.characters.get('Barriers'):
-                self.path.append(nextNode)
-
-        elif self.direction == 1:
-            nextNode = self.grid.getGrid()[self.get_pos()[0]][self.get_pos()[1] + 1]
-
-            if nextNode not in self.characters.get('Barriers'):
-                self.path.append(nextNode)
-
-        elif self.direction == 2:
-
-            nextNode = self.grid.getGrid()[self.get_pos()[0] - 1][self.get_pos()[1]]
-
-            if nextNode not in self.characters.get('Barriers'):
-                self.path.append(nextNode)
-
-        elif self.direction == 3:
-            nextNode = self.grid.getGrid()[self.get_pos()[0] + 1][self.get_pos()[1]]
-
-            if nextNode not in self.characters.get('Barriers'):
-                self.path.append(nextNode)
-
-    def pickUp(self):
-        for i, item in enumerate(self.characters.get('Items')):
-            if item.get_pos() == self.get_pos():
-                #add item to dictionary
-                self.items.append(item)
-
-                # remove from interactive characters item list
-                self.removeCharacter('Items', i)
-                # remove item sprite from sprite group
-                item.kill()
-
-    def dropItem(self, node, item):
-        #update items position
-        item.updatePosition(node.get_pos())
-        self.spriteGroup.add(item)
-
-        # add item sprite back into the game
-        self.spriteGroup.add(item)
-
-        # add the character back into the game
-        self.addCharcter('Items', item)
-
-    def removeCharacter(self, characterType, position):
-        tempArray = self.characters.get(characterType)
-        tempArray.pop(position)
-        self.characters.update({characterType: tempArray})
-
-
-
-    def addCharcter(self, characterType, character):
-        #get the specific array from the interactive characters dictionary
-        tempArray = self.characters.get(characterType)
-
-        #add character to array
-        tempArray.append(character)
-        #update characters dictionary
-        self.characters.update({characterType: tempArray})
