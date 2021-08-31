@@ -7,6 +7,8 @@ class Squirrel(Animal):
         Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters)
         self.image = self.createSprite(spriteSheet, 0, 0, width, width)
         self.animalState = 'sniff'
+        self.barriers = ['Trees', 'Barriers']
+        self.characterFlee = ['Dogs']
 
 
     def update(self):
@@ -25,7 +27,7 @@ class Squirrel(Animal):
         self.rect.y = self.pos.y
 
     def goTowardsTree(self):
-        if ((h(self.get_pos(), self.characters.get('Player').get_pos()) > 5)):
+        if not self.checkEnemyClose(5):
             self.animalState = 'sniff'
             self.stateReset()
             self._layer = 3
@@ -58,18 +60,18 @@ class Squirrel(Animal):
     def hideInTreeState(self):
 
         #chck if player is gone and enough time has passed
-        if ((h(self.get_pos(), self.characters.get('Player').get_pos()) > 10) and self.coolDownTimer < -100):
+        if not self.checkEnemyClose(10) and self.coolDownTimer < -100:
             self.animalState = 'sniff'
             self.stateReset()
             self._layer = 3
 
         #if player is still there reset cooldown timer
-        elif(h(self.get_pos(), self.characters.get('Player').get_pos()) < 10):
+        elif self.checkEnemyClose(10):
             self.coolDownTimer = self.coolDown
 
     def sniffState(self):
         #if person is close by change state to go towards tree
-        if((h(self.get_pos(), self.characters.get('Player').get_pos()) < 5)):
+        if self.checkEnemyClose(5):
             self.animalState = 'go towards tree'
             self.stateReset()
 
@@ -77,6 +79,17 @@ class Squirrel(Animal):
             self.randomMove()
             self.movement()
             self.coolDownTimer = self.coolDown
+
+    def checkEnemyClose(self, distance):
+
+        enemyClose = False
+        for enemyType in self.characterFlee:
+            for enemy in self.characters.get(enemyType):
+                if ((h(self.get_pos(), enemy.get_pos()) < distance)):
+                    enemyClose = True
+
+        return enemyClose
+
 
     def randomMove(self):
 
@@ -86,7 +99,7 @@ class Squirrel(Animal):
             nextNode = self.grid.getGrid()[self.row][self.col - 1]
             #iterate through trees if squirrel is close
             for i in self.characters.get('Trees'):
-                if not self.checkNodes('Barriers', (self.row, self.col - 1)) and h(nextNode.get_pos(), i.get_pos()) < 5:
+                if not self.checkNodes((self.row, self.col - 1)) and h(nextNode.get_pos(), i.get_pos()) < 5:
                     self.path.append(nextNode)
 
         elif self.direction == 1:
@@ -94,7 +107,7 @@ class Squirrel(Animal):
             nextNode = self.grid.getGrid()[self.row][self.col + 1]
 
             for i in self.characters.get('Trees'):
-                if not self.checkNodes('Barriers', (self.row, self.col + 1)) and h(nextNode.get_pos(), i.get_pos()) < 5:
+                if not self.checkNodes((self.row, self.col + 1)) and h(nextNode.get_pos(), i.get_pos()) < 5:
                     self.path.append(nextNode)
 
         elif self.direction == 2:
@@ -102,13 +115,13 @@ class Squirrel(Animal):
             nextNode = self.grid.getGrid()[self.row - 1][self.col]
 
             for i in self.characters.get('Trees'):
-                if not self.checkNodes('Barriers', (self.row - 1, self.col)) and h(nextNode.get_pos(), i.get_pos()) < 5:
+                if not self.checkNodes((self.row - 1, self.col)) and h(nextNode.get_pos(), i.get_pos()) < 5:
                     self.path.append(nextNode)
 
         elif self.direction == 3:
             nextNode = self.grid.getGrid()[self.row + 1][self.col]
 
             for i in self.characters.get('Trees'):
-                if not self.checkNodes('Barriers', (self.row + 1, self.col)) and h(nextNode.get_pos(), i.get_pos()) < 5:
+                if not self.checkNodes((self.row + 1, self.col)) and h(nextNode.get_pos(), i.get_pos()) < 5:
                     self.path.append(nextNode)
 

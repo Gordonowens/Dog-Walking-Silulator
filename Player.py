@@ -65,28 +65,28 @@ class Player(Animal):
                 if event.key == pygame.K_UP:
                     nextNode = [self.row, self.col - 1]
 
-                    if not self.checkNodes('Barriers', (self.row, self.col - 1)):
+                    if not self.checkNodes((self.row, self.col - 1)):
                         self.updatePosition(nextNode)
 
                 #down
                 elif event.key == pygame.K_DOWN:
                     nextNode = [self.row, self.col + 1]
 
-                    if not self.checkNodes('Barriers', (self.row, self.col + 1)):
+                    if not self.checkNodes((self.row, self.col + 1)):
                         self.updatePosition(nextNode)
 
                 #left
                 elif event.key == pygame.K_LEFT:
                     nextNode = [self.row - 1, self.col]
 
-                    if not self.checkNodes('Barriers', (self.row -1, self.col)):
+                    if not self.checkNodes((self.row -1, self.col)):
                         self.updatePosition(nextNode)
 
                 #right
                 elif event.key == pygame.K_RIGHT:
                     nextNode = [self.row + 1, self.col]
 
-                    if not self.checkNodes('Barriers', (self.row + 1, self.col)):
+                    if not self.checkNodes((self.row + 1, self.col)):
                         self.updatePosition(nextNode)
 
                 #space come here

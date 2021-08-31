@@ -34,6 +34,7 @@ class Animal(BasicSprite):
         self.characters = characters
         self.coolDown = 5
         self.coolDownTimer = 5
+        self.barriers = ['Barriers', 'Trees']
 
 
     def makeFleeState(self):
@@ -162,7 +163,7 @@ class Animal(BasicSprite):
 
             for node in row:
 
-                if not self.checkNodes('Barriers', node.get_pos()) and node.get_pos() != self.characters.get('Player').get_pos():
+                if not self.checkNodes(node.get_pos()) and node.get_pos() != self.characters.get('Player').get_pos():
                     #if distance of node is better update
                     if h(node.get_pos(), self.characters.get('Player').get_pos()) > bestDist:
 
@@ -183,26 +184,26 @@ class Animal(BasicSprite):
             #nextNode = self.grid.getGrid()[self.get_pos()[0]][self.get_pos()[1] - 1]
             nextNode = self.grid.getGrid()[self.row][self.col - 1]
 
-            if not self.checkNodes('Barriers', (self.row, self.col - 1)):
+            if not self.checkNodes((self.row, self.col - 1)):
                 self.path.append(nextNode)
 
         elif self.direction == 1:
             nextNode = self.grid.getGrid()[self.row][self.col + 1]
 
-            if not self.checkNodes('Barriers', (self.row, self.col + 1)):
+            if not self.checkNodes((self.row, self.col + 1)):
                 self.path.append(nextNode)
 
         elif self.direction == 2:
 
             nextNode = self.grid.getGrid()[self.row - 1][self.col]
 
-            if not self.checkNodes('Barriers', (self.row - 1, self.col)):
+            if not self.checkNodes((self.row - 1, self.col)):
                 self.path.append(nextNode)
 
         elif self.direction == 3:
             nextNode = self.grid.getGrid()[self.row + 1][self.col]
 
-            if not self.checkNodes('Barriers', (self.row + 1, self.col)):
+            if not self.checkNodes((self.row + 1, self.col)):
                 self.path.append(nextNode)
 
     def pickUp(self):
@@ -243,14 +244,15 @@ class Animal(BasicSprite):
         #update characters dictionary
         self.characters.update({characterType: tempArray})
 
-    def checkNodes(self, characterType, position):
+    def checkNodes(self, position):
 
         nodeState = False
 
-        for character in self.characters.get(characterType):
-            if character.get_pos() == position:
-                nodeState = True
-                break
+        for barrierType in self.barriers:
+            for barrier in self.characters.get(barrierType):
+                if barrier.get_pos() == position:
+                    nodeState = True
+                    break
 
         return nodeState
 
