@@ -3,15 +3,16 @@ from config import *
 
 class Dog(Animal):
 
-    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup):
+    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters):
 
-        Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup)
+        Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters)
 
         self.recordTime = 0
         self.coolDown = 5
         self.coolDownTimer = 5
         self.goal = None
         self.items = []
+        self.characters = characters
 
     def stateReset(self):
         '''resets path and player command when transfering between states'''
@@ -49,7 +50,7 @@ class Dog(Animal):
             self.stateReset()
 
         # else if animal is far enough from player change state to flee sniff
-        elif (h(self.get_pos(), PLAYER[0].get_pos()) > 5):
+        elif (h(self.get_pos(), self.characters.get('Player').get_pos()) > 5):
             self.animalState = 'flee sniff'
             self.stateReset()
 
@@ -60,12 +61,12 @@ class Dog(Animal):
             self.coolDownTimer = self.coolDown
 
         # else if player is too close find a place to move to
-        elif (h(self.get_pos(), PLAYER[0].get_pos()) < 5) and len(self.path) <= 0:
+        elif (h(self.get_pos(), self.characters.get('Player').get_pos()) < 5) and len(self.path) <= 0:
             self.runAway()
 
     def fleeSniffState(self):
         # if player is less than 5 blocks away change state to flee
-        if (h(self.get_pos(), PLAYER[0].get_pos()) < 5):
+        if (h(self.get_pos(), self.characters.get('Player').get_pos()) < 5):
             self.animalState = 'flee'
             self.stateReset()
 
@@ -100,7 +101,7 @@ class Dog(Animal):
             self.stateReset()
 
         # if player is within 4 spaces of animal change state to follow sniff
-        elif h(self.get_pos(), PLAYER[0].get_pos()) < 4:
+        elif h(self.get_pos(), self.characters.get('Player').get_pos()) < 4:
             self.animalState = 'follow sniff'
             self.stateReset()
 
@@ -110,7 +111,7 @@ class Dog(Animal):
             self.movement()
 
         elif len(self.path) <= 0:
-            self.come(PLAYER[0])
+            self.come(self.characters.get('Player'))
 
     def followSniffState(self):
         # if player is over 4 spaces away from animal then create a path to player
@@ -131,7 +132,7 @@ class Dog(Animal):
             self.stateReset()
 
         # if player is more than 4 spaces from dog change state to follow
-        elif h(self.get_pos(), PLAYER[0].get_pos()) > 4:
+        elif h(self.get_pos(), self.characters.get('Player').get_pos()) > 4:
             self.animalState = 'follow'
             self.stateReset()
 
@@ -143,7 +144,7 @@ class Dog(Animal):
     def fetchState(self):
         #get location of ball
 
-        if self.goal not in ITEMS:
+        if self.goal not in self.characters.get('Items'):
             self.animalState = 'follow'
             self.stateReset()
             self.goal = None
@@ -165,7 +166,7 @@ class Dog(Animal):
     def returnBallState(self):
 
         #if dog is near player drop ball and change state to follow
-        if h(self.get_pos(), PLAYER[0].get_pos()) <=1:
+        if h(self.get_pos(), self.characters.get('Player').get_pos()) <=1:
             self.dropItem(self, self.items[0])
             self.animalState = 'follow'
             self.stateReset()
@@ -179,7 +180,7 @@ class Dog(Animal):
 
         #create path
         elif len(self.path) <= 0:
-            self.come(PLAYER[0])
+            self.come(self.characters.get('Player'))
 
     def update(self):
         '''
@@ -222,39 +223,62 @@ class Dog(Animal):
 
         if self.direction == 0:
             nextNode = self.grid.getGrid()[self.get_pos()[0]][self.get_pos()[1] - 1]
-            if nextNode not in BARRIER:
+            if nextNode not in self.characters.get('Barriers'):
                 self.path.append(nextNode)
 
         elif self.direction == 1:
             nextNode = self.grid.getGrid()[self.get_pos()[0]][self.get_pos()[1] + 1]
 
-            if nextNode not in BARRIER:
+            if nextNode not in self.characters.get('Barriers'):
                 self.path.append(nextNode)
 
         elif self.direction == 2:
 
             nextNode = self.grid.getGrid()[self.get_pos()[0] - 1][self.get_pos()[1]]
 
-            if nextNode not in BARRIER:
+            if nextNode not in self.characters.get('Barriers'):
                 self.path.append(nextNode)
 
         elif self.direction == 3:
             nextNode = self.grid.getGrid()[self.get_pos()[0] + 1][self.get_pos()[1]]
 
-            if nextNode not in BARRIER:
+            if nextNode not in self.characters.get('Barriers'):
                 self.path.append(nextNode)
 
     def pickUp(self):
-        for i, item in enumerate(ITEMS):
+        for i, item in enumerate(self.characters.get('Items')):
             if item.get_pos() == self.get_pos():
                 #add item to dictionary
                 self.items.append(item)
-                #remove from game
-                ITEMS.pop(i)
+
+                # remove from interactive characters item list
+                self.removeCharacter('Items', i)
+                # remove item sprite from sprite group
                 item.kill()
 
     def dropItem(self, node, item):
         #update items position
         item.updatePosition(node.get_pos())
         self.spriteGroup.add(item)
-        ITEMS.append(item)
+
+        # add item sprite back into the game
+        self.spriteGroup.add(item)
+
+        # add the character back into the game
+        self.addCharcter('Items', item)
+
+    def removeCharacter(self, characterType, position):
+        tempArray = self.characters.get(characterType)
+        tempArray.pop(position)
+        self.characters.update({characterType: tempArray})
+
+
+
+    def addCharcter(self, characterType, character):
+        #get the specific array from the interactive characters dictionary
+        tempArray = self.characters.get(characterType)
+
+        #add character to array
+        tempArray.append(character)
+        #update characters dictionary
+        self.characters.update({characterType: tempArray})

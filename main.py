@@ -61,7 +61,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
 
             #create animal sprite
             elif(tilemap[j][i] == "A"):
-                node = Animal(i, j, gap, len(tilemap), gameGrid, spriteSheets[2], spriteGroup)
+                node = Animal(i, j, gap, len(tilemap), gameGrid, spriteSheets[2], spriteGroup, iteractionCharacters)
                 #append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)
@@ -93,7 +93,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
 
             # create dog sprite
             elif (tilemap[j][i] == "D"):
-                node = Dog(i, j, gap, len(tilemap), gameGrid, spriteSheets[2], spriteGroup)
+                node = Dog(i, j, gap, len(tilemap), gameGrid, spriteSheets[2], spriteGroup, iteractionCharacters)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), spriteSheets[0]))
                 spriteGroup.add(node)

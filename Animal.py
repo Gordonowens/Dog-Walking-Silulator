@@ -16,7 +16,7 @@ follow: if player is over 5 paces away move to the player
 flee: if player is 5 paces away, move away
 '''
 class Animal(Node):
-    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup):
+    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters):
 
         Node.__init__(self, row, col, width, total_rows, spriteSheet)
         self._layer = 3
@@ -30,6 +30,7 @@ class Animal(Node):
         self.grid = grid
         self.playerCommand = ''
         self.spriteGroup = spriteGroup
+        self.characters = characters
 
 
     def makeFleeState(self):
@@ -166,12 +167,12 @@ class Animal(Node):
         for i in getGridSquare(self.get_pos(), 5, self.grid.getGrid()):
 
             for j in i:
-                if j not in BARRIER and j not in PLAYER:
+                if j not in self.characters.get('Barriers') and j != self.characters.get('Player'):
                     #if distance of node is better update
-                    if h(j.get_pos(), PLAYER[0].get_pos()) > bestDist:
+                    if h(j.get_pos(), self.characters.get('Player').get_pos()) > bestDist:
 
                         bestNode = j
-                        bestDist = h(j.get_pos(), PLAYER[0].get_pos())
+                        bestDist = h(j.get_pos(), self.characters.get('Player').get_pos())
 
         #a good node has been found update animals path to it
         if bestNode != None:
