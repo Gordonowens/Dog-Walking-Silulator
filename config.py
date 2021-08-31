@@ -53,7 +53,7 @@ tilemap1 = ['B.',
            'B.']
 
 
-tilemap1 = [
+tilemap = [
     'BBBBBBBBBBBBBBBBBBBBBBB',
     'B.....................B',
     'B...........T.........B',
@@ -79,7 +79,7 @@ tilemap1 = [
     'BBBBBBBBBBBBBBBBBBBBBBB'
 ]
 
-tilemap = [
+tilemap1 = [
     'BBBBBBBBBBBBBBBBBBBBBBB',
     'B.....................B',
     'B.....................B',

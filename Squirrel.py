@@ -1,10 +1,10 @@
 from Dog import *
 
-class Squirrel(Dog):
+class Squirrel(Animal):
 
-    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup):
+    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters):
 
-        Dog.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup)
+        Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters)
         self.image = self.createSprite(spriteSheet, 0, 0, width, width)
         self.animalState = 'sniff'
 
@@ -25,7 +25,7 @@ class Squirrel(Dog):
         self.rect.y = self.pos.y
 
     def goTowardsTree(self):
-        if ((h(self.get_pos(), PLAYER[0].get_pos()) > 5)):
+        if ((h(self.get_pos(), self.characters.get('Player').get_pos()) > 5)):
             self.animalState = 'sniff'
             self.stateReset()
             self._layer = 3
@@ -41,8 +41,8 @@ class Squirrel(Dog):
         # create path
         elif len(self.path) <= 0:
 
-            bestTree = TREES[0]
-            for tree in TREES:
+            bestTree = self.characters.get('Trees')[0]
+            for tree in self.characters.get('Trees'):
                 if h(tree.get_pos(), self.get_pos()) < h(bestTree.get_pos(), self.get_pos()):
                     bestTree = tree
 
@@ -58,18 +58,18 @@ class Squirrel(Dog):
     def hideInTreeState(self):
 
         #chck if player is gone and enough time has passed
-        if ((h(self.get_pos(), PLAYER[0].get_pos()) > 10) and self.coolDownTimer < -100):
+        if ((h(self.get_pos(), self.characters.get('Player').get_pos()) > 10) and self.coolDownTimer < -100):
             self.animalState = 'sniff'
             self.stateReset()
             self._layer = 3
 
         #if player is still there reset cooldown timer
-        elif(h(self.get_pos(), PLAYER[0].get_pos()) < 10):
+        elif(h(self.get_pos(), self.characters.get('Player').get_pos()) < 10):
             self.coolDownTimer = self.coolDown
 
     def sniffState(self):
         #if person is close by change state to go towards tree
-        if((h(self.get_pos(), PLAYER[0].get_pos()) < 5)):
+        if((h(self.get_pos(), self.characters.get('Player').get_pos()) < 5)):
             self.animalState = 'go towards tree'
             self.stateReset()
 
@@ -83,33 +83,32 @@ class Squirrel(Dog):
         self.direction = randrange(4)
 
         if self.direction == 0:
-            nextNode = self.grid.getGrid()[self.get_pos()[0]][self.get_pos()[1] - 1]
+            nextNode = self.grid.getGrid()[self.row][self.col - 1]
             #iterate through trees if squirrel is close
-            for i in TREES:
-
-                if nextNode not in BARRIER and h(nextNode.get_pos(), i.get_pos()) < 5:
+            for i in self.characters.get('Trees'):
+                if not self.checkNodes('Barriers', (self.row, self.col - 1)) and h(nextNode.get_pos(), i.get_pos()) < 5:
                     self.path.append(nextNode)
 
         elif self.direction == 1:
 
-            nextNode = self.grid.getGrid()[self.get_pos()[0]][self.get_pos()[1] + 1]
+            nextNode = self.grid.getGrid()[self.row][self.col + 1]
 
-            for i in TREES:
-                if nextNode not in BARRIER and h(nextNode.get_pos(), i.get_pos()) < 5:
+            for i in self.characters.get('Trees'):
+                if not self.checkNodes('Barriers', (self.row, self.col + 1)) and h(nextNode.get_pos(), i.get_pos()) < 5:
                     self.path.append(nextNode)
 
         elif self.direction == 2:
 
-            nextNode = self.grid.getGrid()[self.get_pos()[0] - 1][self.get_pos()[1]]
+            nextNode = self.grid.getGrid()[self.row - 1][self.col]
 
-            for i in TREES:
-                if nextNode not in BARRIER and h(nextNode.get_pos(), i.get_pos()) < 5:
+            for i in self.characters.get('Trees'):
+                if not self.checkNodes('Barriers', (self.row - 1, self.col)) and h(nextNode.get_pos(), i.get_pos()) < 5:
                     self.path.append(nextNode)
 
         elif self.direction == 3:
-            nextNode = self.grid.getGrid()[self.get_pos()[0] + 1][self.get_pos()[1]]
+            nextNode = self.grid.getGrid()[self.row + 1][self.col]
 
-            for i in TREES:
-                if nextNode not in BARRIER and h(nextNode.get_pos(), i.get_pos()) < 5:
+            for i in self.characters.get('Trees'):
+                if not self.checkNodes('Barriers', (self.row + 1, self.col)) and h(nextNode.get_pos(), i.get_pos()) < 5:
                     self.path.append(nextNode)
 

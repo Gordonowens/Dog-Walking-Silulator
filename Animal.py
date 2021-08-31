@@ -32,6 +32,8 @@ class Animal(BasicSprite):
         self.playerCommand = ''
         self.spriteGroup = spriteGroup
         self.characters = characters
+        self.coolDown = 5
+        self.coolDownTimer = 5
 
 
     def makeFleeState(self):
@@ -251,3 +253,8 @@ class Animal(BasicSprite):
                 break
 
         return nodeState
+
+    def stateReset(self):
+        '''resets path and player command when transfering between states'''
+
+        self.path = []

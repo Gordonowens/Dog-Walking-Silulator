@@ -7,10 +7,7 @@ import math
 from queue import PriorityQueue
 from Barrier import *
 from Player import Player
-from NPC import NPC
 from Grid import*
-from NPCAway import *
-from NPCHangAround import *
 from Animal import *
 from Ground import *
 from Dog import *
@@ -102,7 +99,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
 
             # create squirrel sprite
             elif (tilemap[j][i] == "S"):
-                node = Squirrel(i, j, gap, len(tilemap), gameGrid, spriteSheets[4], spriteGroup)
+                node = Squirrel(i, j, gap, len(tilemap), gameGrid, spriteSheets[4], spriteGroup, iteractionCharacters)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
                 spriteGroup.add(node)
@@ -129,6 +126,8 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
     iteractionCharacters.update({'Dogs': dogs})
     iteractionCharacters.update({'Barriers': barriers})
     iteractionCharacters.update({'Items': items})
+    iteractionCharacters.update({'Trees': trees})
+
     #iteractionCharacters.update({'Animals': animals})
 
 def main():
