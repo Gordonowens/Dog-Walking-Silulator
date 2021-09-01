@@ -39,9 +39,9 @@ tilemap1 = ['BBBBBBB',
            'BBBBBBB']
 
 tilemap1 = ['BBBBB',
+           'BS..B',
            'B...B',
-           'B...B',
-           'B...B',
+           'B..FB',
            'BBBBB']
 
 tilemap1 =  ['BBBBBBB',

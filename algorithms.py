@@ -67,6 +67,7 @@ def algorithm(grid, start, end):
         for neighbor in current.neighbors:
             temp_g_score = g_score[current] + 1
 
+
             if temp_g_score < g_score[neighbor]:
                 came_from[neighbor] = current
                 g_score[neighbor] = temp_g_score
