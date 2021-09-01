@@ -148,6 +148,12 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
 
     #iteractionCharacters.update({'Animals': animals})
 
+def show_score(text, x, y, screen):
+    font = pygame.font.Font('freesansbold.ttf', 12)
+    score = font.render(text, True, (255, 255, 255))
+    screen.blit(score, (x, y))
+
+
 def main():
     #initialise pygam
     pygame.init()
@@ -172,6 +178,7 @@ def main():
     #create grid, creates all the game sprites and characters
     make_grid(WIDTH, all_sprites, spriteSheets, GAP, clock)
 
+
     #game loop
     running = True
     while running:
@@ -180,6 +187,12 @@ def main():
         screen.fill(BLACK)
         all_sprites.update()
         all_sprites.draw(screen)
+        show_score("Press space to get the dog to follow you", 600, 60, screen)
+        show_score("Use arrow keys to control your player", 60, 60, screen)
+        show_score("Press p to pick up the ball", 60, 400, screen)
+        show_score("Press t to throw the ball", 60, 440, screen)
+        show_score("Press press left ctrl to play chase with the dog",600, 120, screen)
+        show_score("Squirrels aren't afraid of humans but will run and hide from dogs", 60, 800, screen)
         pygame.display.update()
         pygame.display.flip()
 

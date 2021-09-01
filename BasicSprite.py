@@ -36,7 +36,6 @@ class BasicSprite(pygame.sprite.Sprite):
         :return:
         '''
 
-        print(spriteSheet.get_alpha())
         sprite = pygame.Surface([width, height])
         sprite.blit(spriteSheet, (0, 0), (x, y, width, height))
         # this is used to create transperancy in the sprite

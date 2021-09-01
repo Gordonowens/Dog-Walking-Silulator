@@ -49,9 +49,12 @@ class Squirrel(Animal):
                     bestTree = tree
 
             if bestTree.get_pos() == self.get_pos():
+                #move squirrel up one square to top of tree
+                self.path = [self.grid.getGrid()[self.row][self.col - 1]]
+                self.movement()
                 self.animalState = 'hide in tree'
                 self.stateReset()
-                self._layer = 0
+                self._layer = 6
 
             else:
                 self._layer = 0
@@ -60,7 +63,7 @@ class Squirrel(Animal):
     def hideInTreeState(self):
 
         #chck if player is gone and enough time has passed
-        if not self.checkEnemyClose(10) and self.coolDownTimer < -100:
+        if not self.checkEnemyClose(10) and self.coolDownTimer < -150:
             self.animalState = 'sniff'
             self.stateReset()
             self._layer = 3
@@ -68,6 +71,7 @@ class Squirrel(Animal):
         #if player is still there reset cooldown timer
         elif self.checkEnemyClose(10):
             self.coolDownTimer = self.coolDown
+            self._layer = 6
 
     def sniffState(self):
         #if person is close by change state to go towards tree
@@ -75,7 +79,7 @@ class Squirrel(Animal):
             self.animalState = 'go towards tree'
             self.stateReset()
 
-        elif self.coolDownTimer <= 0:
+        elif self.coolDownTimer <= -25:
             self.randomMove()
             self.movement()
             self.coolDownTimer = self.coolDown

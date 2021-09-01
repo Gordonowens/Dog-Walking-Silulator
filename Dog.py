@@ -14,7 +14,7 @@ class Dog(Animal):
         self.items = []
         self.characters = characters
         self.image = self.createSprite(spriteSheet, 7, 8, 26, 35)
-        self.image = pygame.transform.scale(self.image, (35,43))
+        self.image = pygame.transform.scale(self.image, (40,50))
 
     def stateReset(self):
         '''resets path and player command when transfering between states'''
@@ -61,7 +61,7 @@ class Dog(Animal):
             self.stateReset()
 
         # else if animal still has places to move move
-        elif len(self.path) > 0 and self.coolDownTimer <= 0:
+        elif len(self.path) > 0 and self.coolDownTimer <= 25:
 
             self.movement()
             self.coolDownTimer = self.coolDown
@@ -90,7 +90,7 @@ class Dog(Animal):
             self.animalState = 'fetch'
             self.stateReset()
 
-        elif self.coolDownTimer <= 0:
+        elif self.coolDownTimer <= 1:
             self.randomMove()
             self.movement()
             self.coolDownTimer = self.coolDown
@@ -116,7 +116,7 @@ class Dog(Animal):
             self.stateReset()
 
         # if there are still spaces to move in the path - then move
-        elif len(self.path) > 0 and self.coolDownTimer <= 0:
+        elif len(self.path) > 0 and self.coolDownTimer <= 1:
             self.coolDownTimer = self.coolDown
             self.movement()
 
@@ -146,7 +146,7 @@ class Dog(Animal):
             self.animalState = 'follow'
             self.stateReset()
 
-        elif self.coolDownTimer <= 0:
+        elif self.coolDownTimer <= -15:
             self.randomMove()
             self.movement()
             self.coolDownTimer = self.coolDown
@@ -164,7 +164,7 @@ class Dog(Animal):
             pass
 
         # if there are still spaces to move in the path - then move
-        elif len(self.path) > 0 and self.coolDownTimer <= 0:
+        elif len(self.path) > 0 and self.coolDownTimer <= 2:
             self.coolDownTimer = self.coolDown
             self.movement()
 
