@@ -6,6 +6,8 @@ from Node import Node
 import math
 from queue import PriorityQueue
 from Barrier import *
+from BarrierDown import *
+from BarrierAccross import *
 from Player import Player
 from Grid import*
 from Animal import *
@@ -46,13 +48,27 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
 
         for j in range(len(tilemap)):
             #create a ground sprite for each tile
-            node = Ground(i, j, gap, len(tilemap), spriteSheets[1])
+            node = Ground(i, j, gap, len(tilemap), spriteSheets[5])
             spriteGroup.add(node)
 
             #create barrier sprite
             if(tilemap[j][i] == "B"):
                 node = Barrier(i, j, gap, len(tilemap), spriteSheets[1])
                 #barrier gets added to gamegrid for pathfinding
+                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                spriteGroup.add(node)
+                barriers.append(node)
+
+            elif (tilemap[j][i] == "I"):
+                node = BarrierDown(i, j, gap, len(tilemap), spriteSheets[5])
+                # barrier gets added to gamegrid for pathfinding
+                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                spriteGroup.add(node)
+                barriers.append(node)
+
+            elif (tilemap[j][i] == "-"):
+                node = BarrierAccross(i, j, gap, len(tilemap), spriteSheets[5])
+                # barrier gets added to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
                 spriteGroup.add(node)
                 barriers.append(node)
@@ -75,15 +91,15 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
 
                 # create Treebottom sprite
             elif (tilemap[j][i] == "t"):
-                node = TreeTop(i, j, gap, len(tilemap), spriteSheets[1])
+                node = TreeTop(i, j, gap, len(tilemap), spriteSheets[5])
                 # barrier gets added to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap),  iteractionCharacters))
                 spriteGroup.add(node)
-                trees.append(node)
+                #trees.append(node)
 
             # create Treebottom sprite
             elif (tilemap[j][i] == "T"):
-                node = TreeBottom(i, j, gap, len(tilemap), spriteSheets[1])
+                node = TreeBottom(i, j, gap, len(tilemap), spriteSheets[5])
                 # barrier gets added to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
                 spriteGroup.add(node)
@@ -96,6 +112,8 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
                 spriteGroup.add(node)
                 dogs.append(node)
+
+
 
             # create squirrel sprite
             elif (tilemap[j][i] == "S"):
@@ -137,11 +155,12 @@ def main():
 
     #load in the sprite sheets
     spriteSheets = []
-    spriteSheets.append(pygame.image.load('img/character.png').convert())
+    spriteSheets.append(pygame.image.load('img/roguelikeChar_transparent.png').convert())
     spriteSheets.append(pygame.image.load('img/terrain.png').convert())
-    spriteSheets.append(pygame.image.load('img/dogs.jpg').convert())
-    spriteSheets.append(pygame.image.load('img/tennis ball.png').convert())
+    spriteSheets.append(pygame.image.load('img/shibu inu sprite sheet.jpeg').convert())
+    spriteSheets.append(pygame.image.load('img/sheet_equipment.png').convert())
     spriteSheets.append(pygame.image.load('img/squirrel.png').convert())
+    spriteSheets.append(pygame.image.load('img/terrain2.png').convert())
 
 
     #set the game clock

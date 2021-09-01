@@ -18,7 +18,8 @@ class Player(Animal):
         Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters)
         #sprite layer
         self._layer = 2
-        self.image = self.createSprite(spriteSheet, 3, 2, width, width)
+        self.image = self.createSprite(spriteSheet, 17, 104, 16, 16, WHITE)
+        self.image = pygame.transform.scale(self.image, (30, 30))
         self.grid = grid
         self.items = []
         self.spriteGroup = spriteGroup
@@ -35,7 +36,7 @@ class Player(Animal):
                 for row in getGridSquare(self.get_pos(), 5, self.grid.getGrid()):
 
                     for node in row:
-                        if node not in self.characters.get('Barriers') and node.get_pos() != self.get_pos():
+                        if not self.checkNodes(node.get_pos()) and node.get_pos() != self.get_pos():
                            nodeList.append(node)
 
                 #pick random node in list and drop ball there

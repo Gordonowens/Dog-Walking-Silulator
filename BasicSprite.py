@@ -25,7 +25,7 @@ class BasicSprite(pygame.sprite.Sprite):
     def get_pos(self):
         return self.row, self.col
 
-    def createSprite(self, spriteSheet, x, y, width, height):
+    def createSprite(self, spriteSheet, x, y, width, height, background = BLACK):
         '''
 
         :param spriteSheet:
@@ -36,10 +36,11 @@ class BasicSprite(pygame.sprite.Sprite):
         :return:
         '''
 
+        print(spriteSheet.get_alpha())
         sprite = pygame.Surface([width, height])
         sprite.blit(spriteSheet, (0, 0), (x, y, width, height))
         # this is used to create transperancy in the sprite
-        sprite.set_colorkey(BLACK)
+        sprite.set_colorkey(background)
         return sprite
 
     def updatePosition(self, position):
