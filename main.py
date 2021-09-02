@@ -191,7 +191,7 @@ def main():
         show_score("Use arrow keys to control your player", 60, 60, screen)
         show_score("Press p to pick up the ball", 60, 400, screen)
         show_score("Press t to throw the ball", 60, 440, screen)
-        show_score("Press press left ctrl to play chase with the dog",450, 120, screen)
+        show_score("Press press left ctrl to play chase with the dog",450 , 120, screen)
         show_score("Squirrels aren't afraid of humans but will run and hide from dogs", 60, 800, screen)
         pygame.display.update()
         pygame.display.flip()

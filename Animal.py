@@ -144,7 +144,7 @@ class Animal(BasicSprite):
 
         for row in self.grid.getGrid():
             for node in row:
-                node.update_neighbors(self.grid.getGrid())
+                node.update_neighbors(self.grid.getGrid(), self.barriers)
 
         self.path = algorithm(self.grid.getGrid(), self.grid.getGrid()[self.row][self.col], self.grid.getGrid()[toNode.row][toNode.col])
 
@@ -208,7 +208,7 @@ class Animal(BasicSprite):
 
     def pickUp(self):
         for i, item in enumerate(self.characters.get('Items')):
-            if item.get_pos() == self.get_pos():
+            if h(item.get_pos(), self.get_pos()) < 2.5:
                 #add item to dictionary
                 self.items.append(item)
 

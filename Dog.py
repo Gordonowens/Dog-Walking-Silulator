@@ -15,6 +15,7 @@ class Dog(Animal):
         self.characters = characters
         self.image = self.createSprite(spriteSheet, 7, 8, 26, 35)
         self.image = pygame.transform.scale(self.image, (40,50))
+        self.barriers = ['Trees', 'Barriers']
 
     def stateReset(self):
         '''resets path and player command when transfering between states'''

@@ -32,18 +32,18 @@ class Node():
 	def make_end(self):
 		self.state = 'end'
 
-	def checkNodes(self, characterType, position):
+	def checkNodes(self, barrierType, position):
 
 		nodeState = False
 
-		for character in self.characters.get(characterType):
-			if character.get_pos() == position:
+		for barrier in self.characters.get(barrierType):
+			if barrier.get_pos() == position:
 				nodeState = True
 				break
 
 		return nodeState
 
-	def update_neighbors(self, grid):
+	def update_neighbors(self, grid, barriers):
 		'''
 		gets all the neighbor nodes that are not barriers and updates self.neighbors
 		:list grid: grid to find path on
