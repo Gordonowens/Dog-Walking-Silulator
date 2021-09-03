@@ -24,6 +24,7 @@ class Player(Animal):
         self.items = []
         self.spriteGroup = spriteGroup
         self.characters = characters
+        self.nextMovement = ''
 
     def throw(self):
 
@@ -54,62 +55,73 @@ class Player(Animal):
         with the world
         '''
 
-        for event in pygame.event.get():
 
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
 
-            elif event.type == pygame.KEYDOWN:
+        #up
+        if self.nextMovement == 'up':
+            nextNode = [self.row, self.col - 1]
 
-                #up
-                if event.key == pygame.K_UP:
-                    nextNode = [self.row, self.col - 1]
+            if not self.checkNodes((self.row, self.col - 1)):
+                self.updatePosition(nextNode)
 
-                    if not self.checkNodes((self.row, self.col - 1)):
-                        self.updatePosition(nextNode)
+            self.nextMovement = ''
 
-                #down
-                elif event.key == pygame.K_DOWN:
-                    nextNode = [self.row, self.col + 1]
+        #down
+        elif self.nextMovement == 'down':
+            nextNode = [self.row, self.col + 1]
 
-                    if not self.checkNodes((self.row, self.col + 1)):
-                        self.updatePosition(nextNode)
+            if not self.checkNodes((self.row, self.col + 1)):
+                self.updatePosition(nextNode)
 
-                #left
-                elif event.key == pygame.K_LEFT:
-                    nextNode = [self.row - 1, self.col]
+            self.nextMovement = ''
 
-                    if not self.checkNodes((self.row -1, self.col)):
-                        self.updatePosition(nextNode)
+        #left
+        elif self.nextMovement == 'left':
+            nextNode = [self.row - 1, self.col]
 
-                #right
-                elif event.key == pygame.K_RIGHT:
-                    nextNode = [self.row + 1, self.col]
+            if not self.checkNodes((self.row -1, self.col)):
+                self.updatePosition(nextNode)
 
-                    if not self.checkNodes((self.row + 1, self.col)):
-                        self.updatePosition(nextNode)
+            self.nextMovement = ''
 
-                #space come here
-                elif event.key == pygame.K_SPACE:
-                    for dog in self.characters.get('Dogs'):
-                        dog.playerCommand = 'follow'
+        #right
+        elif self.nextMovement == 'right':
+            nextNode = [self.row + 1, self.col]
 
-                elif event.key == pygame.K_LCTRL:
-                    for dog in self.characters.get('Dogs'):
-                        dog.playerCommand = 'flee'
+            if not self.checkNodes((self.row + 1, self.col)):
+                self.updatePosition(nextNode)
 
-                elif event.key == pygame.K_s:
-                    for dog in self.characters.get('Dogs'):
-                        dog.playerCommand = 'stay'
+            self.nextMovement = ''
 
-                elif event.key == pygame.K_t:
+        #space come here
+        elif self.nextMovement == 'here boy':
+            for dog in self.characters.get('Dogs'):
+                dog.playerCommand = 'follow'
 
-                    ball = self.throw()
-                    if ball != 0:
-                        for dog in self.characters.get('Dogs'):
-                            dog.goal = ball
-                            dog.animalState = "fetch"
+            self.nextMovement = ''
 
-                elif event.key == pygame.K_p:
-                    self.pickUp()
+        elif self.nextMovement == 'go away':
+            for dog in self.characters.get('Dogs'):
+                dog.playerCommand = 'flee'
+
+            self.nextMovement = ''
+
+        elif self.nextMovement == 'stay':
+            for dog in self.characters.get('Dogs'):
+                dog.playerCommand = 'stay'
+
+            self.nextMovement = ''
+
+        elif self.nextMovement == 'throw':
+
+            ball = self.throw()
+            if ball != 0:
+                for dog in self.characters.get('Dogs'):
+                    dog.goal = ball
+                    dog.animalState = "fetch"
+            self.nextMovement = ''
+
+        elif self.nextMovement == 'pick up':
+            self.pickUp()
+
+            self.nextMovement = ''

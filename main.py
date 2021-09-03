@@ -17,9 +17,11 @@ from Ball import *
 from TreeBottom import *
 from TreeTop import *
 from Squirrel import *
+from Game import *
+from GoalTile import *
 
 
-def make_grid(width, spriteGroup, spriteSheets, gap, clock):
+def make_game(width, spriteSheets, gap, clock, gamemap):
     '''
     this function iterates through the tilemap and generates sprites
     and creates game grid for pathfinding
@@ -31,6 +33,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
 
     grid = []
     gameGrid = Grid([])
+    spriteGroup = pygame.sprite.LayeredUpdates()
 
     dogs = []
     barriers = []
@@ -43,98 +46,105 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
     iteractionCharacters = {}
 
     #iterate over tile map and generate sprites and gamegrid
-    for i in range(len(tilemap)):
+    for i in range(len(gamemap)):
         grid.append([])
 
-        for j in range(len(tilemap)):
+        for j in range(len(gamemap)):
             #create a ground sprite for each tile
-            node = Ground(i, j, gap, len(tilemap), spriteSheets[5])
+            node = Ground(i, j, gap, len(gamemap), spriteSheets[5])
             spriteGroup.add(node)
 
             #create barrier sprite
-            if(tilemap[j][i] == "B"):
-                node = Barrier(i, j, gap, len(tilemap), spriteSheets[1])
+            if(gamemap[j][i] == "B"):
+                node = Barrier(i, j, gap, len(gamemap), spriteSheets[1])
                 #barrier gets added to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
                 barriers.append(node)
 
-            elif (tilemap[j][i] == "I"):
-                node = BarrierDown(i, j, gap, len(tilemap), spriteSheets[5])
+
+            elif (gamemap[j][i] == "G"):
+                node = GoalTile(i, j, gap, len(gamemap), spriteSheets[1])
                 # barrier gets added to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
+                spriteGroup.add(node)
+                #goals.append(node)
+
+
+            elif (gamemap[j][i] == "I"):
+                node = BarrierDown(i, j, gap, len(gamemap), spriteSheets[5])
+                # barrier gets added to gamegrid for pathfinding
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
                 barriers.append(node)
 
-            elif (tilemap[j][i] == "-"):
-                node = BarrierAccross(i, j, gap, len(tilemap), spriteSheets[5])
+            elif (gamemap[j][i] == "-"):
+                node = BarrierAccross(i, j, gap, len(gamemap), spriteSheets[5])
                 # barrier gets added to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
                 barriers.append(node)
 
             #create animal sprite
-            elif(tilemap[j][i] == "A"):
-                node = Animal(i, j, gap, len(tilemap), gameGrid, spriteSheets[2], spriteGroup, iteractionCharacters)
+            elif(gamemap[j][i] == "A"):
+                node = Animal(i, j, gap, len(gamemap), gameGrid, spriteSheets[2], spriteGroup, iteractionCharacters)
                 #append a general node to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
                 animals.append(node)
 
             # create tennis ball sprite
-            elif (tilemap[j][i] == "Q"):
-                node = Ball(i, j, gap, len(tilemap), spriteSheets[3])
+            elif (gamemap[j][i] == "Q"):
+                node = Ball(i, j, gap, len(gamemap), spriteSheets[3])
                 # append a general node to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
                 items.append(node)
 
                 # create Treebottom sprite
-            elif (tilemap[j][i] == "t"):
-                node = TreeTop(i, j, gap, len(tilemap), spriteSheets[5])
+            elif (gamemap[j][i] == "t"):
+                node = TreeTop(i, j, gap, len(gamemap), spriteSheets[5])
                 # barrier gets added to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(tilemap),  iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
                 #trees.append(node)
 
             # create Treebottom sprite
-            elif (tilemap[j][i] == "T"):
-                node = TreeBottom(i, j, gap, len(tilemap), spriteSheets[5])
+            elif (gamemap[j][i] == "T"):
+                node = TreeBottom(i, j, gap, len(gamemap), spriteSheets[5])
                 # barrier gets added to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
                 #barriers.append(node)
                 trees.append(node)
 
             # create dog sprite
-            elif (tilemap[j][i] == "D"):
-                node = Dog(i, j, gap, len(tilemap), gameGrid, spriteSheets[2], spriteGroup, iteractionCharacters)
+            elif (gamemap[j][i] == "D"):
+                node = Dog(i, j, gap, len(gamemap), gameGrid, spriteSheets[2], spriteGroup, iteractionCharacters)
                 # append a general node to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
                 dogs.append(node)
 
-
-
             # create squirrel sprite
-            elif (tilemap[j][i] == "S"):
-                node = Squirrel(i, j, gap, len(tilemap), gameGrid, spriteSheets[4], spriteGroup, iteractionCharacters)
+            elif (gamemap[j][i] == "S"):
+                node = Squirrel(i, j, gap, len(gamemap), gameGrid, spriteSheets[4], spriteGroup, iteractionCharacters)
                 # append a general node to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
                 squirrels.append(node)
 
 
             #create player
-            elif (tilemap[j][i] == "P"):
-                node = Player(gameGrid, i, j, gap, len(tilemap), spriteSheets[0], spriteGroup, iteractionCharacters)
+            elif (gamemap[j][i] == "P"):
+                node = Player(gameGrid, i, j, gap, len(gamemap), spriteSheets[0], spriteGroup, iteractionCharacters)
                 # append a general node to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
                 player = node
 
             else:
-                node = Node(i, j, gap, len(tilemap), iteractionCharacters)
+                node = Node(i, j, gap, len(gamemap), iteractionCharacters)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(node)
 
@@ -147,13 +157,55 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
     iteractionCharacters.update({'Items': items})
     iteractionCharacters.update({'Trees': trees})
 
-    #iteractionCharacters.update({'Animals': animals})
+    return Game(iteractionCharacters, gameGrid, spriteGroup)
 
 def show_score(text, x, y, screen):
     font = pygame.font.Font('freesansbold.ttf', 18)
     score = font.render(text, True, (255, 255, 255))
     screen.blit(score, (x, y))
 
+
+def keyEvent(game):
+    for event in pygame.event.get():
+
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+        elif event.type == pygame.KEYDOWN:
+
+            # up
+            if event.key == pygame.K_UP:
+                game.characters.get('Player').nextMovement = 'up'
+
+            # down
+            elif event.key == pygame.K_DOWN:
+                game.characters.get('Player').nextMovement = 'down'
+
+            # left
+            elif event.key == pygame.K_LEFT:
+                game.characters.get('Player').nextMovement = 'left'
+
+            # right
+            elif event.key == pygame.K_RIGHT:
+                game.characters.get('Player').nextMovement = 'right'
+
+            # space come here
+            elif event.key == pygame.K_SPACE:
+                game.characters.get('Player').nextMovement = 'here boy'
+
+
+            elif (event.key == pygame.K_LCTRL) or (event.key == pygame.K_RCTRL):
+                game.characters.get('Player').nextMovement = 'go away'
+
+            elif event.key == pygame.K_s:
+                game.characters.get('Player').nextMovement = 'stay'
+
+            elif event.key == pygame.K_t:
+                game.characters.get('Player').nextMovement = 'throw'
+
+            elif event.key == pygame.K_p:
+                game.characters.get('Player').nextMovement = 'pick up'
 
 def main():
     #initialise pygam
@@ -174,29 +226,34 @@ def main():
     clock = pygame.time.Clock()
 
     #create group to control updating and drawing of sprites
-    all_sprites = pygame.sprite.LayeredUpdates()
+
 
     #create grid, creates all the game sprites and characters
-    make_grid(WIDTH, all_sprites, spriteSheets, GAP, clock)
+    game = make_game(WIDTH, spriteSheets, GAP, clock, startmap)
 
 
-    #game loop
+    #game loop for game 1
     running = True
     while running:
+        keyEvent(game)
 
         clock.tick(FPS)
         screen.fill(BLACK)
-        all_sprites.update()
-        all_sprites.draw(screen)
-        show_score("Press space to get the dog to follow you", 500, 60, screen)
-        show_score("Use arrow keys to control your player", 60, 60, screen)
-        show_score("Press p to pick up the ball", 60, 400, screen)
-        show_score("Press t to throw the ball", 60, 440, screen)
-        show_score("Press press left ctrl to play chase with the dog",450 , 120, screen)
-        show_score("Squirrels aren't afraid of humans but will run and hide from dogs", 60, 800, screen)
+
+        game.spriteGroup.update()
+        game.spriteGroup.draw(screen)
+        show_score("Use arrow keys to control your character", 30, 60, screen)
+        show_score("Press 'space' to get the dog to follow you", 500, 60, screen)
+        show_score("Press 's' to get the dog to stay", 500, 85, screen)
+        show_score("Press 'ctrl' to play chase with the dog", 500, 110, screen)
+
+        show_score("Press 'p' to pick up the ball and 't' to throw", 30, 375, screen)
+        show_score("the dog will play fetch", 30, 390, screen)
+        show_score("Squirrels are scared of dogs but not humans", 350, 825, screen)
         pygame.display.update()
         pygame.display.flip()
 
+        
 if __name__ == "__main__":
     main()
 
