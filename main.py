@@ -103,6 +103,7 @@ def make_grid(width, spriteGroup, spriteSheets, gap, clock):
                 # barrier gets added to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(tilemap), iteractionCharacters))
                 spriteGroup.add(node)
+                #barriers.append(node)
                 trees.append(node)
 
             # create dog sprite
