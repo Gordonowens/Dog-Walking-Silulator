@@ -13,9 +13,55 @@ class Dog(Animal):
         self.goal = None
         self.items = []
         self.characters = characters
-        self.image = self.createSprite(spriteSheet, 7, 8, 26, 35)
-        self.image = pygame.transform.scale(self.image, (40,50))
+        self.sprites = self.createAnimations(spriteSheet)
+        self.image = self.sprites[3]
         self.barriers = ['Trees', 'Barriers']
+        self.animalState = 'stay'
+
+    def createAnimations(self, spriteSheet):
+
+        up = self.createSprite(spriteSheet, 8, 69, 26, 35)
+        up = pygame.transform.scale(up, (40, 50))
+
+        down = self.createSprite(spriteSheet, 7, 8, 26, 35)
+        down = pygame.transform.scale(down, (40, 50))
+
+        left = self.createSprite(spriteSheet, 35, 106, 26, 35)
+        left = pygame.transform.scale(left, (40, 50))
+
+        right = self.createSprite(spriteSheet, 99, 42, 26, 35)
+        right = pygame.transform.scale(right, (40, 50))
+
+        sleep = self.createSprite(spriteSheet, 34, 236, 30, 25)
+        sleep = pygame.transform.scale(sleep, (40, 50))
+
+        stay = self.createSprite(spriteSheet, 99, 167, 26, 35)
+        stay = pygame.transform.scale(stay, (40, 50))
+
+        return [up, down, left, right, stay, sleep]
+
+    def updatePosition(self, position):
+        '''
+        :tuple position: x, y
+        :return:
+        '''
+
+        # up
+        if position[0] < self.pos.x:
+            self.image = self.sprites[0]
+        elif position[0] > self.pos.x:
+            self.image = self.sprites[1]
+
+        # update position on game grid
+        self.row = position[0]
+        self.col = position[1]
+        # set position of upper left of sprites rectangle
+        self.pos.x = position[0] * 30
+        self.pos.y = position[1] * 30
+
+        # update sprite rectangle
+        self.rect.x = self.pos.x
+        self.rect.y = self.pos.y
 
     def stateReset(self):
         '''resets path and player command when transfering between states'''
@@ -25,6 +71,7 @@ class Dog(Animal):
 
 
     def stayState(self):
+        self.image = self.sprites[4]
         if self.playerCommand == 'flee':
             self.animalState = 'flee'
             self.stateReset()
@@ -41,6 +88,36 @@ class Dog(Animal):
         elif self.playerCommand == 'fetch':
             self.animalState = 'fetch'
             self.stateReset()
+
+        elif self.coolDownTimer == -25:
+
+            self.animalState = 'sleep'
+            self.stateReset()
+
+    def sleepState(self):
+        if self.coolDownTimer % 5 == 0:
+            self.image = self.sprites[5]
+
+        else:
+            self.image = self.sprites[4]
+
+        print(self.coolDownTimer)
+        if self.playerCommand == 'flee':
+            self.animalState = 'flee'
+            self.stateReset()
+
+
+        elif self.playerCommand == 'follow':
+            self.animalState = 'follow'
+            self.stateReset()
+
+        elif self.playerCommand == 'stay':
+            self.animalState = 'stay'
+            self.stateReset()
+
+
+
+
 
     def fleeState(self):
         # change state if appropriote
@@ -204,6 +281,9 @@ class Dog(Animal):
         #do nothing if in stay state
         if self.animalState == 'stay':
             self.stayState()
+
+        elif self.animalState == 'sleep':
+            self.sleepState()
 
         elif self.animalState == 'flee':
             self.fleeState()

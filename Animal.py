@@ -21,7 +21,7 @@ class Animal(BasicSprite):
 
         BasicSprite.__init__(self, row, col, width, total_rows, spriteSheet)
         self._layer = 3
-        self.image = self.createSprite(spriteSheet, 26, 101, 26, 35)
+
 
         #this stores path calculated by pathfinding algorithm
         #[end, node, node, start]
@@ -34,8 +34,77 @@ class Animal(BasicSprite):
         self.characters = characters
         self.coolDown = 5
         self.coolDownTimer = 5
+        self.animationCount = 0
+        self.animations = self.createAnimations(spriteSheet)
+        self.movementNow = 'Up'
+        self.image = pygame.transform.scale(self.createSprite(spriteSheet, 2, 2, 26, 35, (55,99,77)), (40, 50))
+
         self.barriers = ['Barriers', 'Trees']
 
+    def updateSprite(self):
+        if self.animationCount > len(self.animations.get(self.movementNow)) - 1:
+            self.animationCount = 0
+
+        self.image = self.animations.get(self.movementNow)[self.animationCount]
+        self.animationCount = self.animationCount + 1
+
+
+
+    def createAnimations(self, spriteSheet):
+
+        animations = {}
+        up = []
+        up.append(pygame.transform.scale(self.createSprite(spriteSheet, 55, 40, 26, 35, (55,99,77)), (40, 50)))
+        up.append(pygame.transform.scale(self.createSprite(spriteSheet, 123, 39, 26, 35, (55,99,77)), (40, 50)))
+
+        right = []
+
+        right.append(pygame.transform.scale(self.createSprite(spriteSheet, 42, 5, 26, 35, (55, 99, 77)), (40, 50)))
+        right.append(pygame.transform.scale(self.createSprite(spriteSheet, 63, 2, 26, 35, (55, 99, 77)), (40, 50)))
+        right.append(pygame.transform.scale(self.createSprite(spriteSheet, 100, 4, 26, 35, (55, 99, 77)), (40, 50)))
+        right.append(pygame.transform.scale(self.createSprite(spriteSheet, 127, 5, 26, 35, (55, 99, 77)), (40, 50)))
+        right.append(pygame.transform.scale(self.createSprite(spriteSheet, 150, 3, 26, 35, (55, 99, 77)), (40, 50)))
+        right.append(pygame.transform.scale(self.createSprite(spriteSheet, 179, 5, 26, 35, (55, 99, 77)), (40, 50)))
+
+        left = []
+
+        left.append(pygame.transform.flip(pygame.transform.scale(self.createSprite(spriteSheet, 42, 5, 26, 35, (55, 99, 77)), (40, 50)), True, False))
+        left.append(pygame.transform.flip(pygame.transform.scale(self.createSprite(spriteSheet, 63, 2, 26, 35, (55, 99, 77)), (40, 50)), True, False))
+        left.append(pygame.transform.flip(pygame.transform.scale(self.createSprite(spriteSheet, 100, 4, 26, 35, (55, 99, 77)), (40, 50)), True, False))
+        left.append(pygame.transform.flip(pygame.transform.scale(self.createSprite(spriteSheet, 127, 5, 26, 35, (55, 99, 77)), (40, 50)), True, False))
+        left.append(pygame.transform.flip(pygame.transform.scale(self.createSprite(spriteSheet, 150, 3, 26, 35, (55, 99, 77)), (40, 50)), True, False))
+        left.append(pygame.transform.flip(pygame.transform.scale(self.createSprite(spriteSheet, 179, 5, 26, 35, (55, 99, 77)), (40, 50)), True, False))
+
+        down = []
+        down.append(pygame.transform.scale(self.createSprite(spriteSheet, 55, 80, 26, 35, (55, 99, 77)), (40, 50)))
+        down.append(pygame.transform.scale(self.createSprite(spriteSheet, 79, 84, 26, 35, (55, 99, 77)), (40, 50)))
+        down.append(pygame.transform.scale(self.createSprite(spriteSheet, 102, 81, 26, 35, (55, 99, 77)), (40, 50)))
+        down.append(pygame.transform.scale(self.createSprite(spriteSheet, 125, 80, 26, 35, (55, 99, 77)), (40, 50)))
+        down.append(pygame.transform.scale(self.createSprite(spriteSheet, 148, 83, 26, 35, (55, 99, 77)), (40, 50)))
+        down.append(pygame.transform.scale(self.createSprite(spriteSheet, 171, 81, 26, 35, (55, 99, 77)), (40, 50)))
+
+        stayUp =[]
+        stayUp.append(pygame.transform.scale(self.createSprite(spriteSheet, 3, 41, 26, 35, (55, 99, 77)), (40, 50)))
+
+        stayDown = []
+        stayDown.append(pygame.transform.scale(self.createSprite(spriteSheet, 2, 79, 26, 35, (55, 99, 77)), (40, 50)))
+
+        stayRight = []
+        stayRight.append(pygame.transform.scale(self.createSprite(spriteSheet, 3, 3, 26, 35, (55, 99, 77)), (40, 50)))
+
+        stayLeft = []
+        stayLeft.append(pygame.transform.scale(self.createSprite(spriteSheet, 3, 3, 26, 35, (55, 99, 77)), (40, 50)))
+
+        animations.update({'Up': up})
+        animations.update({'Right': right})
+        animations.update({'Left': left})
+        animations.update({'Down': down})
+        animations.update({'Stay Up': stayUp})
+        animations.update({'Stay Down': stayDown})
+        animations.update({'Stay Right': stayRight})
+        animations.update({'Stay Left': stayLeft})
+
+        return animations
 
     def makeFleeState(self):
 
@@ -260,3 +329,23 @@ class Animal(BasicSprite):
         '''resets path and player command when transfering between states'''
 
         self.path = []
+
+    def updatePosition(self, position):
+        '''
+        :tuple position: x, y
+        :return:
+        '''
+
+        #update sprites
+
+        # update position on game grid
+        self.row = position[0]
+        self.col = position[1]
+        # set position of upper left of sprites rectangle
+        self.pos.x = position[0] * 30
+        self.pos.y = position[1] * 30
+
+        # update sprite rectangle
+        self.rect.x = self.pos.x
+        self.rect.y = self.pos.y
+        self.updateSprite()

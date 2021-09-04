@@ -38,10 +38,10 @@ tilemap2 = ['BBBBBBB',
            'B.....B',
            'BBBBBBB']
 
-test = ['BBBBB',
-           'BS..B',
+testdog =    ['BBBBB',
            'B...B',
-           'B..FB',
+           'B...B',
+           'BP..B',
            'BBBBB']
 
 playermove =  ['BBBBBBB',
@@ -65,7 +65,7 @@ playball =  ['BBBBBBBBBBBBBB',
              'B.........I..B',
              'B------...I..B',
              'B.........I..B',
-             'B..D......I..B',
+             'B.........I..B',
              'BBBBBBBBBBBBBB']
 
 tilemap2 = ['BQ',

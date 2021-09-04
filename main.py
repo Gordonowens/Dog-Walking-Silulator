@@ -207,6 +207,9 @@ def keyEvent(game):
             elif event.key == pygame.K_p:
                 game.characters.get('Player').nextMovement = 'pick up'
 
+        elif event.type == pygame.KEYUP:
+            game.characters.get('Player').nextMovement = ''
+
 def main():
     #initialise pygam
     pygame.init()
@@ -214,7 +217,7 @@ def main():
 
     #load in the sprite sheets
     spriteSheets = []
-    spriteSheets.append(pygame.image.load('img/roguelikeChar_transparent.png').convert())
+    spriteSheets.append(pygame.image.load('img/player.png').convert())
     spriteSheets.append(pygame.image.load('img/terrain.png').convert())
     spriteSheets.append(pygame.image.load('img/shibu inu sprite sheet.jpeg').convert())
     spriteSheets.append(pygame.image.load('img/sheet_equipment.png').convert())
@@ -229,7 +232,7 @@ def main():
 
 
     #create grid, creates all the game sprites and characters
-    game = make_game(WIDTH, spriteSheets, GAP, clock, startmap)
+    game = make_game(WIDTH, spriteSheets, GAP, clock, playball)
 
 
     #game loop for game 1
@@ -253,7 +256,6 @@ def main():
         pygame.display.update()
         pygame.display.flip()
 
-        
 if __name__ == "__main__":
     main()
 

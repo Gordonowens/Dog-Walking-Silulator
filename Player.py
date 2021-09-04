@@ -18,13 +18,13 @@ class Player(Animal):
         Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters)
         #sprite layer
         self._layer = 2
-        self.image = self.createSprite(spriteSheet, 17, 104, 16, 16, WHITE)
-        self.image = pygame.transform.scale(self.image, (30, 30))
         self.grid = grid
         self.items = []
         self.spriteGroup = spriteGroup
         self.characters = characters
         self.nextMovement = ''
+
+
 
     def throw(self):
 
@@ -55,6 +55,8 @@ class Player(Animal):
         with the world
         '''
 
+        self.coolDownTimer = self.coolDownTimer - 1
+
 
 
         #up
@@ -62,55 +64,59 @@ class Player(Animal):
             nextNode = [self.row, self.col - 1]
 
             if not self.checkNodes((self.row, self.col - 1)):
+                self.movementNow = 'Up'
                 self.updatePosition(nextNode)
 
-            self.nextMovement = ''
+            #self.nextMovement = ''
 
         #down
         elif self.nextMovement == 'down':
             nextNode = [self.row, self.col + 1]
 
             if not self.checkNodes((self.row, self.col + 1)):
+                self.movementNow = 'Down'
                 self.updatePosition(nextNode)
 
-            self.nextMovement = ''
+            #self.nextMovement = ''
 
         #left
         elif self.nextMovement == 'left':
             nextNode = [self.row - 1, self.col]
 
             if not self.checkNodes((self.row -1, self.col)):
+                self.movementNow = 'Left'
                 self.updatePosition(nextNode)
 
-            self.nextMovement = ''
+            #self.nextMovement = ''
 
         #right
         elif self.nextMovement == 'right':
             nextNode = [self.row + 1, self.col]
 
             if not self.checkNodes((self.row + 1, self.col)):
+                self.movementNow = 'Right'
                 self.updatePosition(nextNode)
 
-            self.nextMovement = ''
+            #self.nextMovement = ''
 
         #space come here
         elif self.nextMovement == 'here boy':
             for dog in self.characters.get('Dogs'):
                 dog.playerCommand = 'follow'
 
-            self.nextMovement = ''
+            #self.nextMovement = ''
 
         elif self.nextMovement == 'go away':
             for dog in self.characters.get('Dogs'):
                 dog.playerCommand = 'flee'
 
-            self.nextMovement = ''
+            #self.nextMovement = ''
 
         elif self.nextMovement == 'stay':
             for dog in self.characters.get('Dogs'):
                 dog.playerCommand = 'stay'
 
-            self.nextMovement = ''
+            #self.nextMovement = ''
 
         elif self.nextMovement == 'throw':
 
@@ -119,9 +125,39 @@ class Player(Animal):
                 for dog in self.characters.get('Dogs'):
                     dog.goal = ball
                     dog.animalState = "fetch"
-            self.nextMovement = ''
+            #self.nextMovement = ''
 
         elif self.nextMovement == 'pick up':
             self.pickUp()
 
-            self.nextMovement = ''
+            #self.nextMovement = ''
+
+        elif self.nextMovement == '':
+
+            if self.movementNow == 'Right':
+                self.movementNow = 'Stay Right'
+                self.updateSprite()
+
+            elif self.movementNow == 'Left':
+                self.movementNow = 'Stay Left'
+                self.updateSprite()
+
+            elif self.movementNow == 'Up':
+                self.movementNow = 'Stay Up'
+                self.updateSprite()
+
+            elif self.movementNow == 'Down':
+                self.movementNow = 'Stay Down'
+                self.updateSprite()
+
+
+
+
+
+
+
+        #if self.coolDownTimer < 0:
+
+            #self.coolDownTimer = self.coolDown
+
+
