@@ -41,6 +41,7 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
     items = []
     trees = []
     squirrels = []
+    ground = []
     player = None
 
     iteractionCharacters = {}
@@ -53,6 +54,7 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
             #create a ground sprite for each tile
             node = Ground(i, j, gap, len(gamemap), spriteSheets[5])
             spriteGroup.add(node)
+            ground.append(node)
 
             #create barrier sprite
             if(gamemap[j][i] == "B"):
@@ -156,6 +158,7 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
     iteractionCharacters.update({'Barriers': barriers})
     iteractionCharacters.update({'Items': items})
     iteractionCharacters.update({'Trees': trees})
+    iteractionCharacters.update({'Ground': ground})
 
     return Game(iteractionCharacters, gameGrid, spriteGroup)
 
@@ -176,39 +179,61 @@ def keyEvent(game):
 
             # up
             if event.key == pygame.K_UP:
-                game.characters.get('Player').nextMovement = 'up'
+                game.characters.get('Player').playerCommand = 'up'
 
             # down
             elif event.key == pygame.K_DOWN:
-                game.characters.get('Player').nextMovement = 'down'
+                game.characters.get('Player').playerCommand = 'down'
 
             # left
             elif event.key == pygame.K_LEFT:
-                game.characters.get('Player').nextMovement = 'left'
+                game.characters.get('Player').playerCommand = 'left'
 
             # right
             elif event.key == pygame.K_RIGHT:
-                game.characters.get('Player').nextMovement = 'right'
+                game.characters.get('Player').playerCommand = 'right'
 
             # space come here
             elif event.key == pygame.K_SPACE:
-                game.characters.get('Player').nextMovement = 'here boy'
+                game.characters.get('Player').playerCommand = 'here boy'
 
 
             elif (event.key == pygame.K_LCTRL) or (event.key == pygame.K_RCTRL):
-                game.characters.get('Player').nextMovement = 'go away'
+                game.characters.get('Player').playerCommand = 'go away'
 
             elif event.key == pygame.K_s:
-                game.characters.get('Player').nextMovement = 'stay'
+                game.characters.get('Player').playerCommand = 'stay'
 
             elif event.key == pygame.K_t:
-                game.characters.get('Player').nextMovement = 'throw'
+                game.characters.get('Player').playerCommand = 'throw'
 
             elif event.key == pygame.K_p:
-                game.characters.get('Player').nextMovement = 'pick up'
+                game.characters.get('Player').playerCommand = 'pick up'
 
         elif event.type == pygame.KEYUP:
-            game.characters.get('Player').nextMovement = ''
+            game.characters.get('Player').playerCommand = ''
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            pos = pygame.mouse.get_pos()
+
+            for dog in game.characters.get('Dogs'):
+                if dog.rect.collidepoint(pos) == 1:
+                    print('goood boy')
+
+                    return
+
+            for item in game.characters.get('Items'):
+                if item.rect.collidepoint(pos) == 1:
+                    game.characters.get('Player').pickUp()
+
+                    return
+
+            for ground in game.characters.get('Ground'):
+                if ground.rect.collidepoint(pos) == 1:
+                    game.characters.get('Player').throw(ground)
+
+
+
 
 def main():
     #initialise pygam
@@ -232,7 +257,7 @@ def main():
 
 
     #create grid, creates all the game sprites and characters
-    game = make_game(WIDTH, spriteSheets, GAP, clock, playball)
+    game = make_game(WIDTH, spriteSheets, GAP, clock, tilemap1)
 
 
     #game loop for game 1

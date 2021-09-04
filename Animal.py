@@ -35,22 +35,26 @@ class Animal(BasicSprite):
         self.coolDown = 5
         self.coolDownTimer = 5
         self.animationCount = 0
-        self.animations = self.createAnimations(spriteSheet)
-        self.movementNow = 'Up'
+        self.spriteSets = self.createSpriteSheets(spriteSheet)
+        self.animationCells = []
+        self.movementSprite = 'Left'
         self.image = pygame.transform.scale(self.createSprite(spriteSheet, 2, 2, 26, 35, (55,99,77)), (40, 50))
 
         self.barriers = ['Barriers', 'Trees']
 
     def updateSprite(self):
-        if self.animationCount > len(self.animations.get(self.movementNow)) - 1:
+        if self.animationCount > len(self.spriteSets.get(self.movementSprite)) - 1:
             self.animationCount = 0
 
-        self.image = self.animations.get(self.movementNow)[self.animationCount]
+        self.image = self.spriteSets.get(self.movementSprite)[self.animationCount]
         self.animationCount = self.animationCount + 1
 
 
+    def animateAnimals(self):
+        if len(self.animationCells) > 0:
+            self.image = self.animationCells.pop()
 
-    def createAnimations(self, spriteSheet):
+    def createSpriteSheets(self, spriteSheet):
 
         animations = {}
         up = []
@@ -95,6 +99,12 @@ class Animal(BasicSprite):
         stayLeft = []
         stayLeft.append(pygame.transform.scale(self.createSprite(spriteSheet, 3, 3, 26, 35, (55, 99, 77)), (40, 50)))
 
+        throw = []
+        throw.append(pygame.transform.scale(self.createSprite(spriteSheet, 89, 576, 26, 35, (55, 99, 77)), (40, 50)))
+        throw.append(pygame.transform.scale(self.createSprite(spriteSheet, 125, 580, 26, 35, (55, 99, 77)), (40, 50)))
+        throw.append(pygame.transform.scale(self.createSprite(spriteSheet, 169, 578, 26, 35, (55, 99, 77)), (40, 50)))
+        throw.append(pygame.transform.scale(self.createSprite(spriteSheet, 201, 577, 26, 35, (55, 99, 77)), (40, 50)))
+
         animations.update({'Up': up})
         animations.update({'Right': right})
         animations.update({'Left': left})
@@ -103,6 +113,7 @@ class Animal(BasicSprite):
         animations.update({'Stay Down': stayDown})
         animations.update({'Stay Right': stayRight})
         animations.update({'Stay Left': stayLeft})
+        animations.update({'Throw': throw})
 
         return animations
 
@@ -337,6 +348,25 @@ class Animal(BasicSprite):
         '''
 
         #update sprites
+        #up
+        if self.col - 1 == position[1]:
+            self.movementSprite = 'Up'
+
+
+        #down
+        elif self.col + 1 == position[1]:
+            self.movementSprite = 'Down'
+
+
+        #left
+        elif self.row - 1 == position[0]:
+            self.movementSprite = 'Left'
+
+
+        #right
+        elif self.row + 1 == position[0]:
+            self.movementSprite = 'Right'
+
 
         # update position on game grid
         self.row = position[0]
