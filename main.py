@@ -19,6 +19,7 @@ from TreeTop import *
 from Squirrel import *
 from Game import *
 from GoalTile import *
+from RoughGround import *
 
 
 def make_game(width, spriteSheets, gap, clock, gamemap):
@@ -66,9 +67,16 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
 
 
             elif (gamemap[j][i] == "G"):
-                node = GoalTile(i, j, gap, len(gamemap), spriteSheets[1])
+                node = GoalTile(i, j, gap, len(gamemap), spriteSheets[5])
                 # barrier gets added to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters, 1))
+                spriteGroup.add(node)
+                #goals.append(node)
+
+            elif (gamemap[j][i] == "R"):
+                node = RoughGround(i, j, gap, len(gamemap), spriteSheets[5])
+                # barrier gets added to gamegrid for pathfinding
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters, 5))
                 spriteGroup.add(node)
                 #goals.append(node)
 
@@ -257,7 +265,7 @@ def main():
 
 
     #create grid, creates all the game sprites and characters
-    game = make_game(WIDTH, spriteSheets, GAP, clock, tilemap1)
+    game = make_game(WIDTH, spriteSheets, GAP, clock, pathstest)
 
 
     #game loop for game 1

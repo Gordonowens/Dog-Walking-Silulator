@@ -68,6 +68,21 @@ playball =  ['BBBBBBBBBBBBBB',
              'B.........I..B',
              'BBBBBBBBBBBBBB']
 
+pathstest =  ['BBBBBBBBBBBBBB',
+             'BPD..........B',
+             'B.Q..........B',
+             'B........G...B',
+             'B........G...B',
+             'B........G...B',
+             'BRRRRRRRRRRR.B',
+             'BRRRRRRR.G...B',
+             'B........G...B',
+             'B........G...B',
+             'B........G...B',
+             'B........G...B',
+             'B..GGGGGGG...B',
+             'BBBBBBBBBBBBBB']
+
 tilemap2 = ['BQ',
            'B.']
 

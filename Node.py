@@ -2,7 +2,7 @@ from config import *
 from pygame import *
 class Node():
 
-	def __init__(self, row, col, width, total_rows, characters):
+	def __init__(self, row, col, width, total_rows, characters, w = 3):
 
 		#variables for game grid
 		self.row = row
@@ -13,6 +13,7 @@ class Node():
 		self.state = ''
 		self.neighbors = []
 		self.characters = characters
+		self.w = w
 
 	def get_pos(self):
 		return self.row, self.col
