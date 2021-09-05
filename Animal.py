@@ -23,8 +23,6 @@ class Animal(BasicSprite):
         self._layer = 3
 
 
-        #this stores path calculated by pathfinding algorithm
-        #[end, node, node, start]
         self.path = []
         self.animalState = 'stay'
         self.direction = 0

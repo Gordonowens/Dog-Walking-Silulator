@@ -56,10 +56,26 @@ class Node():
 		if self.row < self.total_rows - 1 and not self.checkNodes('Barriers', (self.row + 1, self.col)):
 			self.neighbors.append(grid[self.row + 1][self.col])
 
+		#down right
+		if (self.row < self.total_rows - 1 and self.col < self.total_rows - 1 ) and not self.checkNodes('Barriers', (self.row + 1, self.col + 1)):
+			self.neighbors.append(grid[self.row + 1][self.col + 1])
+
+		#down left
+		if (self.row < self.total_rows - 1 and self.col > 0) and not self.checkNodes('Barriers', (self.row + 1, self.col - 1)):
+			self.neighbors.append(grid[self.row + 1][self.col - 1])
+
 
 		#up
 		if self.row > 0 and not self.checkNodes('Barriers', (self.row - 1, self.col)):
 			self.neighbors.append(grid[self.row - 1][self.col])
+
+		#up right
+		if (self.row > 0 and self.col < self.total_rows - 1 ) and not self.checkNodes('Barriers', (self.row - 1, self.col + 1)):
+			self.neighbors.append(grid[self.row - 1][self.col + 1])
+
+		#up left
+		if (self.row > 0 and self.col > 0) and not self.checkNodes('Barriers', (self.row - 1, self.col - 1)):
+			self.neighbors.append(grid[self.row - 1][self.col - 1])
 
 		#right
 		if self.col < self.total_rows - 1 and not self.checkNodes('Barriers', (self.row, self.col + 1)):
