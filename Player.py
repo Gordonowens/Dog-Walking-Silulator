@@ -25,8 +25,6 @@ class Player(Animal):
         self.characters = characters
         self.playerCommand = ''
 
-
-
     def throw(self, node):
 
         #check player has ball
@@ -36,12 +34,24 @@ class Player(Animal):
                 if not self.checkNodes(node.get_pos()) and node.get_pos() != self.get_pos():
                     self.dropItem(node, item)
                     self.items.pop(i)
-                    self.playerCommand = 'throw'
+                    #self.playerCommand = 'throw'
                     self.animationCells = self.spriteSets.get('Throw').copy()
                     self.movementSprite = 'Throw'
-                    return item
 
-        return 0
+                    for dog in self.characters.get('Dogs'):
+                        dog.goal = item
+                        dog.animalState = "fetch"
+
+    def dropItem(self, node, item):
+
+        item.updatePosition(node.get_pos())
+        self.spriteGroup.add(item)
+
+        # add item sprite back into the game
+        self.spriteGroup.add(item)
+
+        # add the character back into the game
+        self.addCharcter('Items', item)
 
     def update(self):
         '''
@@ -61,7 +71,6 @@ class Player(Animal):
                     self.movementSprite = 'Up'
                     self.updatePosition(nextNode)
 
-                #self.nextMovement = ''
 
             #down
             elif self.playerCommand == 'down':
@@ -71,8 +80,6 @@ class Player(Animal):
                     self.movementSprite = 'Down'
                     self.updatePosition(nextNode)
 
-                #self.nextMovement = ''
-
             #left
             elif self.playerCommand == 'left':
                 nextNode = [self.row - 1, self.col]
@@ -80,8 +87,6 @@ class Player(Animal):
                 if not self.checkNodes((self.row -1, self.col)):
                     self.movementSprite = 'Left'
                     self.updatePosition(nextNode)
-
-                #self.nextMovement = ''
 
             #right
             elif self.playerCommand == 'right':
@@ -91,40 +96,22 @@ class Player(Animal):
                     self.movementSprite = 'Right'
                     self.updatePosition(nextNode)
 
-                #self.nextMovement = ''
-
             #space come here
             elif self.playerCommand == 'here boy':
                 for dog in self.characters.get('Dogs'):
                     dog.playerCommand = 'follow'
 
-                #self.nextMovement = ''
-
             elif self.playerCommand == 'go away':
                 for dog in self.characters.get('Dogs'):
                     dog.playerCommand = 'flee'
-
-                #self.nextMovement = ''
 
             elif self.playerCommand == 'stay':
                 for dog in self.characters.get('Dogs'):
                     dog.playerCommand = 'stay'
 
-                #self.nextMovement = ''
-
-            elif self.playerCommand == 'throw':
-
-                ball = self.throw()
-                if ball != 0:
-                    for dog in self.characters.get('Dogs'):
-                        dog.goal = ball
-                        dog.animalState = "fetch"
-                #self.nextMovement = ''
-
             elif self.playerCommand == 'pick up':
                 self.pickUp()
 
-                #self.nextMovement = ''
 
             elif self.playerCommand == '':
 
@@ -153,7 +140,8 @@ class Player(Animal):
 
             self.coolDownTimer = 0
             if random.randint(0, 100) < 36:
-                print('poo')
+                pass
+                #print('poo')
 
 
         #if self.coolDownTimer < 0:

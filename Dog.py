@@ -1,5 +1,6 @@
 from Animal import *
 from config import *
+from Poo import *
 
 class Dog(Animal):
 
@@ -16,6 +17,7 @@ class Dog(Animal):
         self.barriers = ['Trees', 'Barriers']
         self.animalState = 'stay'
         self.image = pygame.transform.scale(self.createSprite(spriteSheet, 4, 200, 26, 35, (0,0,0)), (40, 50))
+        self.items = [Poo()]
 
 
 
@@ -238,6 +240,7 @@ class Dog(Animal):
             self.sleepState()
 
         elif self.animalState == 'flee':
+            self.poo()
             self.fleeState()
 
         elif self.animalState == 'flee sniff':
@@ -258,6 +261,15 @@ class Dog(Animal):
         #update rectangle of sprite, x,y refers to upper left corner of sprite box
         self.rect.x = self.pos.x
         self.rect.y = self.pos.y
+
+    def poo(self):
+        # check player has ball
+        for i, item in enumerate(self.items):
+            if isinstance(item, Poo):
+
+                self.dropItem(self.grid.getGrid()[self.row][self.col], item)
+                self.items.pop(i)
+
 
     def createSpriteSheets(self, spriteSheet):
 
