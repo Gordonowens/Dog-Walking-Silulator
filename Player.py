@@ -35,8 +35,15 @@ class Player(Animal):
                     self.dropItem(node, item)
                     self.items.pop(i)
                     #self.playerCommand = 'throw'
-                    self.animationCells = self.spriteSets.get('Throw').copy()
+                    if self.movementSprite == 'Stay Right':
+                        self.animationCells = self.spriteSets.get('Throw Right').copy()
+
+
+                    elif self.movementSprite == 'Stay Left':
+                        self.animationCells = self.spriteSets.get('Throw Left').copy()
+
                     self.movementSprite = 'Throw'
+
 
                     for dog in self.characters.get('Dogs'):
                         dog.goal = item

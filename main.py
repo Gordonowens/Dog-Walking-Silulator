@@ -236,7 +236,6 @@ def keyEvent(game):
             for item in game.characters.get('Items'):
                 if item.rect.collidepoint(pos) == 1:
                     game.characters.get('Player').pickUp()
-                    print('pick up')
                     return
 
             for ground in game.characters.get('Ground'):

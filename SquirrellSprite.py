@@ -33,33 +33,38 @@ class SquirrellSprite():
 
         animations = {}
         up = []
-        up.append(self.createSprite(spriteSheet, 6, 230, 30, 30, (0,0,0)))
-        up.append(self.createSprite(spriteSheet, 39, 226, 30, 30, (0,0,0)))
-        up.append(self.createSprite(spriteSheet, 72, 234, 30, 30, (0,0,0)))
+        up.append(self.createSprite(spriteSheet, 6, 230, 20, 30, (0,0,0)))
+        up.append(self.createSprite(spriteSheet, 39, 226, 20, 30, (0,0,0)))
+        up.append(self.createSprite(spriteSheet, 72, 234, 20, 30, (0,0,0)))
 
         left = []
 
-        left.append(self.createSprite(spriteSheet, 4, 38, 30, 30, (0,0,0)))
-        left.append(self.createSprite(spriteSheet, 37, 38, 30, 30, (0,0,0)))
-        left.append(self.createSprite(spriteSheet, 68, 38, 30, 30, (0,0,0)))
-        left.append(self.createSprite(spriteSheet, 166, 37, 30, 30, (0,0,0)))
+        left.append(self.createSprite(spriteSheet, 4, 38, 20, 20, (0,0,0)))
+        left.append(self.createSprite(spriteSheet, 37, 38, 20, 20, (0,0,0)))
+        left.append(self.createSprite(spriteSheet, 68, 38, 28, 20, (0,0,0)))
+        left.append(self.createSprite(spriteSheet, 166, 37, 20, 20, (0,0,0)))
 
         right = []
 
 
-        right.append(self.createSprite(spriteSheet, 4, 38, 26, 35, (0,0,0)))
-        right.append(self.createSprite(spriteSheet, 37, 38, 26, 35, (0,0,0)))
-        right.append(self.createSprite(spriteSheet, 68, 38, 26, 35, (0,0,0)))
-        right.append(self.createSprite(spriteSheet, 166, 37, 26, 35, (0,0,0)))
+
+        right.append(pygame.transform.flip(
+            self.createSprite(spriteSheet, 4, 38, 20, 20, (0, 0, 0)), True, False))
+        right.append(pygame.transform.flip(
+            self.createSprite(spriteSheet, 37, 38, 20, 20, (0, 0, 0)), True, False))
+        right.append(pygame.transform.flip(
+            self.createSprite(spriteSheet, 68, 38, 28, 20, (0, 0, 0)), True, False))
+        right.append(pygame.transform.flip(
+            self.createSprite(spriteSheet, 166, 37, 20, 20, (0, 0, 0)), True, False))
 
 
         down = []
-        down.append(self.createSprite(spriteSheet, 8, 196, 26, 35, (0,0,0)))
-        down.append(self.createSprite(spriteSheet, 40, 191, 26, 35, (0,0,0)))
-        down.append(self.createSprite(spriteSheet, 72, 194, 26, 35, (0,0,0)))
+        down.append(self.createSprite(spriteSheet, 8, 196, 26, 30, (0,0,0)))
+        down.append(self.createSprite(spriteSheet, 40, 191, 26, 30, (0,0,0)))
+        down.append(self.createSprite(spriteSheet, 72, 194, 26, 30, (0,0,0)))
 
         stayRight = []
-        stayRight.append(self.createSprite(spriteSheet, 196, 4, 26, 35, (0, 0, 0)))
+        stayRight.append(self.createSprite(spriteSheet, 196, 4, 26, 30, (0, 0, 0)))
 
 
         animations.update({'Up': up})
