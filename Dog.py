@@ -1,6 +1,7 @@
 from Animal import *
 from config import *
 from Poo import *
+from Ball import *
 
 class Dog(Animal):
 
@@ -207,11 +208,14 @@ class Dog(Animal):
     def returnBallState(self):
 
         #if dog is near player drop ball and change state to follow
-        if h(self.get_pos(), self.characters.get('Player').get_pos()) <=1:
-            self.dropItem(self, self.items[0])
-            self.animalState = 'follow'
-            self.stateReset()
-            self.items = []
+        if h(self.get_pos(), self.characters.get('Player').get_pos()) <= 1:
+            for i, item in enumerate(self.items):
+                if isinstance(item, Ball):
+
+                    self.dropItem(self, item)
+                    self.animalState = 'follow'
+                    self.stateReset()
+                    self.items = []
 
 
         # if there are still spaces to move in the path - then move

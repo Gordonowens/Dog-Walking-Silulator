@@ -47,9 +47,9 @@ testdog =    ['BBBBB',
 playermove =  ['BBBBBBB',
                'BP.B..B',
                'B..B..B',
+               'BQ....B',
                'B.....B',
-               'B..tS.B',
-               'B..T..B',
+               'B.....B',
                'BBBBBBB']
 
 

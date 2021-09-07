@@ -229,6 +229,21 @@ def keyEvent(game):
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
+            #print(pos)
+
+
+
+            for item in game.characters.get('Items'):
+                if item.rect.collidepoint(pos) == 1:
+                    game.characters.get('Player').pickUp()
+                    print('pick up')
+                    return
+
+            for ground in game.characters.get('Ground'):
+                if ground.rect.collidepoint(pos) == 1:
+                    game.characters.get('Player').throw(ground)
+
+
 
             for dog in game.characters.get('Dogs'):
                 if dog.rect.collidepoint(pos) == 1:
@@ -236,15 +251,7 @@ def keyEvent(game):
 
                     return
 
-            for item in game.characters.get('Items'):
-                if item.rect.collidepoint(pos) == 1:
-                    game.characters.get('Player').pickUp()
 
-                    return
-
-            for ground in game.characters.get('Ground'):
-                if ground.rect.collidepoint(pos) == 1:
-                    game.characters.get('Player').throw(ground)
 
 
 
@@ -271,7 +278,7 @@ def main():
 
 
     #create grid, creates all the game sprites and characters
-    game = make_game(WIDTH, spriteSheets, GAP, clock, playball)
+    game = make_game(WIDTH, spriteSheets, GAP, clock, tilemap1)
 
 
     #game loop for game 1
