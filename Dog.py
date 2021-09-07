@@ -16,7 +16,6 @@ class Dog(Animal):
         self.characters = characters
         self.barriers = ['Trees', 'Barriers']
         self.animalState = 'stay'
-        self.image = pygame.transform.scale(self.createSprite(spriteSheet, 4, 200, 26, 35, (0,0,0)), (40, 50))
         self.items = [Poo()]
 
 

@@ -20,6 +20,9 @@ from Squirrel import *
 from Game import *
 from GoalTile import *
 from RoughGround import *
+from SquirrellSprite import *
+from HumanManSprite import *
+from DogSprite import *
 
 
 def make_game(width, spriteSheets, gap, clock, gamemap):
@@ -45,6 +48,9 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
     ground = []
     player = None
 
+    squirrelSprite = SquirrellSprite(spriteSheets[4])
+    manSprite = HumanManSprite(spriteSheets[0])
+    dogSprite = DogSprite(spriteSheets[2])
     iteractionCharacters = {}
 
     #iterate over tile map and generate sprites and gamegrid
@@ -76,7 +82,7 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
             elif (gamemap[j][i] == "R"):
                 node = RoughGround(i, j, gap, len(gamemap), spriteSheets[5])
                 # barrier gets added to gamegrid for pathfinding
-                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters, 5))
+                grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters, 25))
                 spriteGroup.add(node)
                 #goals.append(node)
 
@@ -130,7 +136,7 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
 
             # create dog sprite
             elif (gamemap[j][i] == "D"):
-                node = Dog(i, j, gap, len(gamemap), gameGrid, spriteSheets[2], spriteGroup, iteractionCharacters)
+                node = Dog(i, j, gap, len(gamemap), gameGrid, dogSprite.dogSpriteSheet, spriteGroup, iteractionCharacters)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
@@ -138,7 +144,7 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
 
             # create squirrel sprite
             elif (gamemap[j][i] == "S"):
-                node = Squirrel(i, j, gap, len(gamemap), gameGrid, spriteSheets[4], spriteGroup, iteractionCharacters)
+                node = Squirrel(i, j, gap, len(gamemap), gameGrid, squirrelSprite.squirrelSpriteSheet, spriteGroup, iteractionCharacters)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
@@ -147,7 +153,7 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
 
             #create player
             elif (gamemap[j][i] == "P"):
-                node = Player(gameGrid, i, j, gap, len(gamemap), spriteSheets[0], spriteGroup, iteractionCharacters)
+                node = Player(gameGrid, i, j, gap, len(gamemap), manSprite.humanSpriteSheet, spriteGroup, iteractionCharacters)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
@@ -265,7 +271,7 @@ def main():
 
 
     #create grid, creates all the game sprites and characters
-    game = make_game(WIDTH, spriteSheets, GAP, clock, pathstest)
+    game = make_game(WIDTH, spriteSheets, GAP, clock, playball)
 
 
     #game loop for game 1

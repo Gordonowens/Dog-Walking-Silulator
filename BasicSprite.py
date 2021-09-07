@@ -8,7 +8,7 @@ class BasicSprite(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         # variables for sprite
         self._layer = 0
-        self.image = self.createSprite(spriteSheet, 178, 143, width, width)
+        self.image = spriteSheet
         self.rect = self.image.get_rect()
         self.x = row * width
         self.y = col * width
