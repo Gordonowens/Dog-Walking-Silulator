@@ -23,6 +23,7 @@ from RoughGround import *
 from SquirrellSprite import *
 from HumanManSprite import *
 from DogSprite import *
+from Heart import *
 
 
 def make_game(width, spriteSheets, gap, clock, gamemap):
@@ -51,6 +52,7 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
     squirrelSprite = SquirrellSprite(spriteSheets[4])
     manSprite = HumanManSprite(spriteSheets[0])
     dogSprite = DogSprite(spriteSheets[2])
+    love = Heart(1, 1, gap, len(gamemap), spriteSheets[6])
     iteractionCharacters = {}
 
     #iterate over tile map and generate sprites and gamegrid
@@ -136,7 +138,7 @@ def make_game(width, spriteSheets, gap, clock, gamemap):
 
             # create dog sprite
             elif (gamemap[j][i] == "D"):
-                node = Dog(i, j, gap, len(gamemap), gameGrid, dogSprite.dogSpriteSheet, spriteGroup, iteractionCharacters)
+                node = Dog(i, j, gap, len(gamemap), gameGrid, dogSprite.dogSpriteSheet, spriteGroup, iteractionCharacters, clock, love)
                 # append a general node to gamegrid for pathfinding
                 grid[i].append(Node(i, j, gap, len(gamemap), iteractionCharacters))
                 spriteGroup.add(node)
@@ -211,18 +213,13 @@ def keyEvent(game):
             elif event.key == pygame.K_SPACE:
                 game.characters.get('Player').playerCommand = 'here boy'
 
-
             elif (event.key == pygame.K_LCTRL) or (event.key == pygame.K_RCTRL):
                 game.characters.get('Player').playerCommand = 'go away'
 
             elif event.key == pygame.K_s:
                 game.characters.get('Player').playerCommand = 'stay'
 
-            elif event.key == pygame.K_t:
-                game.characters.get('Player').playerCommand = 'throw'
 
-            elif event.key == pygame.K_p:
-                game.characters.get('Player').playerCommand = 'pick up'
 
         elif event.type == pygame.KEYUP:
             game.characters.get('Player').playerCommand = ''
@@ -246,8 +243,8 @@ def keyEvent(game):
 
             for dog in game.characters.get('Dogs'):
                 if dog.rect.collidepoint(pos) == 1:
+                    dog.animalState = 'love'
                     print('goood boy')
-
                     return
 
 
@@ -268,16 +265,19 @@ def main():
     spriteSheets.append(pygame.image.load('img/sheet_equipment.png').convert())
     spriteSheets.append(pygame.image.load('img/squirrel.png').convert())
     spriteSheets.append(pygame.image.load('img/terrain2.png').convert())
+    spriteSheets.append(pygame.image.load('img/love.png').convert())
 
 
     #set the game clock
     clock = pygame.time.Clock()
 
+
+
     #create group to control updating and drawing of sprites
 
 
     #create grid, creates all the game sprites and characters
-    game = make_game(WIDTH, spriteSheets, GAP, clock, tilemap1)
+    game = make_game(WIDTH, spriteSheets, GAP, clock, startmap)
 
 
     #game loop for game 1
@@ -294,9 +294,8 @@ def main():
         show_score("Press 'space' to get the dog to follow you", 500, 60, screen)
         show_score("Press 's' to get the dog to stay", 500, 85, screen)
         show_score("Press 'ctrl' to play chase with the dog", 500, 110, screen)
-
-        show_score("Press 'p' to pick up the ball and 't' to throw", 30, 375, screen)
-        show_score("the dog will play fetch", 30, 390, screen)
+        show_score("Get close to the ball, then use left mouse button to pick up", 30, 375, screen)
+        show_score("use the left button to throw the ball", 30, 390, screen)
         show_score("Squirrels are scared of dogs but not humans", 350, 825, screen)
         pygame.display.update()
         pygame.display.flip()

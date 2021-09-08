@@ -2,10 +2,11 @@ from Animal import *
 from config import *
 from Poo import *
 from Ball import *
+from Heart import *
 
 class Dog(Animal):
 
-    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters):
+    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters, clock, heart):
 
         Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters)
 
@@ -18,6 +19,9 @@ class Dog(Animal):
         self.barriers = ['Trees', 'Barriers']
         self.animalState = 'stay'
         self.items = [Poo()]
+        self.clock = clock
+        self.pooTime = 0
+        self.heart = heart
 
 
 
@@ -46,12 +50,18 @@ class Dog(Animal):
             self.animalState = 'fetch'
             self.stateReset()
 
-        elif self.coolDownTimer == -25:
+        elif self.playerCommand == 'love':
+            self.animalState = 'love'
+            self.stateReset()
+
+        elif self.coolDownTimer == -250:
 
             self.animalState = 'sleep'
             self.movementSprite = 'Sleep'
             self.updateSprite()
             self.stateReset()
+
+
 
     def sleepState(self):
 
@@ -233,27 +243,44 @@ class Dog(Animal):
         no other function can change the dog's state
         '''
 
+        if self.pooTime < 1002:
+            self.pooTime = self.pooTime + 1
+
+
+
         self.coolDownTimer = self.coolDownTimer - 1
 
         #do nothing if in stay state
         if self.animalState == 'stay':
             self.stayState()
+            if self.pooTime > 1000:
+                self.poo()
 
         elif self.animalState == 'sleep':
             self.sleepState()
 
+        elif self.animalState == 'love':
+            self.loveState()
+
         elif self.animalState == 'flee':
-            self.poo()
             self.fleeState()
+            if self.pooTime > 1000:
+                self.poo()
 
         elif self.animalState == 'flee sniff':
             self.fleeSniffState()
+            if self.pooTime > 1000:
+                self.poo()
 
         elif self.animalState == 'follow':
             self.followState()
+            if self.pooTime > 1000:
+                self.poo()
 
         elif self.animalState == 'follow sniff':
             self.followSniffState()
+            if self.pooTime > 1000:
+                self.poo()
 
         elif self.animalState == 'fetch':
             self.fetchState()
@@ -273,55 +300,22 @@ class Dog(Animal):
                 self.dropItem(self.grid.getGrid()[self.row][self.col], item)
                 self.items.pop(i)
 
+    def loveState(self):
 
-    def createSpriteSheets(self, spriteSheet):
+        if self.movementSprite != 'Love':
+            self.animationCells = self.spriteSets.get('Love').copy()
+            self.movementSprite = 'Love'
+            # create heart
+            heart = Heart(self.row + 1, self.col, 30, 10, pygame.image.load('img/love.png').convert())
+            # add heart to
+            self.spriteGroup.add(heart)
 
-        animations = {}
-        up = []
-        up.append(pygame.transform.scale(self.createSprite(spriteSheet, 9, 69, 26, 35, (0,0,0)), (40, 50)))
-        up.append(pygame.transform.scale(self.createSprite(spriteSheet, 40, 69, 26, 35, (0,0,0)), (40, 50)))
-        up.append(pygame.transform.scale(self.createSprite(spriteSheet, 73, 69, 26, 35, (0,0,0)), (40, 50)))
-        up.append(pygame.transform.scale(self.createSprite(spriteSheet, 89, 69, 26, 35, (0,0,0)), (40, 50)))
+        elif self.movementSprite == 'Love' and len(self.animationCells) == 0:
+            self.animalState = 'stay'
+            self.movementSprite = 'Stay'
+            self.updateSprite()
 
-        right = []
-
-        right.append(pygame.transform.scale(self.createSprite(spriteSheet, 4, 42, 26, 35, (0,0,0)), (40, 50)))
-        right.append(pygame.transform.scale(self.createSprite(spriteSheet, 36, 42, 26, 35, (0,0,0)), (40, 50)))
-        right.append(pygame.transform.scale(self.createSprite(spriteSheet, 68, 42, 26, 35, (0,0,0)), (40, 50)))
-        right.append(pygame.transform.scale(self.createSprite(spriteSheet, 99, 42, 26, 35, (0,0,0)), (40, 50)))
-
-        left = []
-
-
-        left.append(pygame.transform.flip(pygame.transform.scale(self.createSprite(spriteSheet, 4, 42, 26, 35, (0,0,0)), (40, 50)), True, False))
-        left.append(pygame.transform.flip(pygame.transform.scale(self.createSprite(spriteSheet, 36, 42, 26, 35, (0,0,0)), (40, 50)), True, False))
-        left.append(pygame.transform.flip(pygame.transform.scale(self.createSprite(spriteSheet, 68, 42, 26, 35, (0,0,0)), (40, 50)), True, False))
-        left.append(pygame.transform.flip(pygame.transform.scale(self.createSprite(spriteSheet, 99, 42, 26, 35, (0,0,0)), (40, 50)), True, False))
-
-
-        down = []
-        down.append(pygame.transform.scale(self.createSprite(spriteSheet, 9, 10, 26, 35, (0,0,0)), (40, 50)))
-        down.append(pygame.transform.scale(self.createSprite(spriteSheet, 41, 11, 26, 35, (0,0,0)), (40, 50)))
-        down.append(pygame.transform.scale(self.createSprite(spriteSheet, 72, 9, 26, 35, (0,0,0)), (40, 50)))
-        down.append(pygame.transform.scale(self.createSprite(spriteSheet, 105, 1, 26, 35, (0,0,0)), (40, 50)))
-
-        sleep = []
-        sleep.append(pygame.transform.scale(self.createSprite(spriteSheet, 3, 236, 26, 35, (0,0,0)), (40, 50)))
-        sleep.append(pygame.transform.scale(self.createSprite(spriteSheet, 35, 236, 26, 35, (0,0,0)), (40, 50)))
-
-        stay = []
-        stay.append(pygame.transform.scale(self.createSprite(spriteSheet, 4, 200, 26, 35, (0,0,0)), (40, 50)))
-        stay.append(pygame.transform.scale(self.createSprite(spriteSheet, 36, 200, 26, 35, (0,0,0)), (40, 50)))
-        stay.append(pygame.transform.scale(self.createSprite(spriteSheet, 68, 216, 26, 35, (0,0,0)), (40, 50)))
-
-
-        animations.update({'Up': up})
-        animations.update({'Right': right})
-        animations.update({'Left': left})
-        animations.update({'Down': down})
-        animations.update({'Sleep': sleep})
-        animations.update({'Stay': stay})
-
-
-        return animations
-
+        # if there are still spaces to move in the path - then move
+        elif self.movementSprite == 'Love' and self.coolDownTimer <= -1:
+            self.animateAnimals()
+            self.coolDownTimer = self.coolDown

@@ -146,6 +146,40 @@ startmap = [
     'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
 ]
 
+
+mapwithpaths = [
+    'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
+    'B...........I...I........D...B',
+    'B.......G...I.I.I............B',
+    'B.P.....G...I.I.I............B',
+    'B.......G.....I.I...........BB',
+    'B.......G...I.I.............BB',
+    'B...BB..G...-------------.--BB',
+    'B...BB..G............I.......B',
+    'B.......G.......I............B',
+    'B.......G....--------.....B..B',
+    'B.RRR...G....................B',
+    'B..RR...G.---------....-----BB',
+    'B.......G.........I..G.......B',
+    'B.......GRR.......I..G.......B',
+    'B..Q....GRRRR.....I..G.......B',
+    'B.......GRRRRR.......G.......B',
+    'BBBGGGGGGGGGGGGGGGGGGGGGGGGGGB',
+    'B....t..G.......B.....G..B...B',
+    'B....T..G.S.t.RRRR....G......B',
+    'B.S....tG...T.RRRR..t.G..t.S.B',
+    'B.RR...TG......B....T.G..T...B',
+    'B.RR.S..G....S.t......G......B',
+    'B.......GRRR...T......G.BB...B',
+    'BGGGGGGGGGGGGGGGGGGGGGGGGGGGGB',
+    'B.......GRRRt....t...SG..t...B',
+    'B.......GRRRT....T....G..T...B',
+    'B..t....GRRR.S.RRRRR..G......B',
+    'B..T....G.t...........G..t...B',
+    'B.......G.TRRRR...S...G..T...B',
+    'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'
+]
+
 tilemape5 = [
     'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
     'B....I..................I..D.B',

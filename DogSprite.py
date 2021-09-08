@@ -63,9 +63,44 @@ class DogSprite():
         sleep.append(pygame.transform.scale(self.createSprite(spriteSheet, 35, 236, 26, 29, (0, 0, 0)), (40, 50)))
 
         stay = []
-        stay.append(pygame.transform.scale(self.createSprite(spriteSheet, 4, 200, 26, 35, (0, 0, 0)), (40, 50)))
-        stay.append(pygame.transform.scale(self.createSprite(spriteSheet, 36, 200, 26, 35, (0, 0, 0)), (40, 50)))
-        stay.append(pygame.transform.scale(self.createSprite(spriteSheet, 68, 216, 26, 35, (0, 0, 0)), (40, 50)))
+        stay.append(pygame.transform.scale(self.createSprite(spriteSheet, 99, 231, 26, 35, (0, 0, 0)), (40, 50)))
+        #stay.append(pygame.transform.scale(self.createSprite(spriteSheet, 4, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        #stay.append(pygame.transform.scale(self.createSprite(spriteSheet, 35, 199, 26, 35, (0, 0, 0)), (40, 50)))
+
+        love = []
+
+        #love.append(pygame.transform.scale(self.createSprite(spriteSheet, 4, 168, 26, 35, (0, 0, 0)), (40, 50)))
+        #love.append(pygame.transform.scale(self.createSprite(spriteSheet, 35, 168, 26, 35, (0, 0, 0)), (40, 50)))
+        #love.append(pygame.transform.scale(self.createSprite(spriteSheet, 65, 168, 26, 35, (0, 0, 0)), (40, 50)))
+        #love.append(pygame.transform.scale(self.createSprite(spriteSheet, 99, 168, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 4, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 35, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 4, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 35, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 4, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 35, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 68, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 68, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 68, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 68, 199, 26, 35, (0, 0, 0)), (40, 50)))
+        love.append(pygame.transform.scale(self.createSprite(spriteSheet, 68, 199, 26, 35, (0, 0, 0)), (40, 50)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         animations.update({'Up': up})
         animations.update({'Right': right})
@@ -74,5 +109,6 @@ class DogSprite():
         animations.update({'Sleep': sleep})
         animations.update({'Stay': stay})
         animations.update({'Stay Right': stay})
+        animations.update({'Love': love})
 
         return animations
