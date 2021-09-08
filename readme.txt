@@ -1,5 +1,5 @@
 
-Dog Walker Simulator: Good Boy Edition
+Dog Walker Simulator: Good Boy Update
 
 The intention of this project is to show how pathfinding algorithms, finate state machines 
 and object orientated programming can be used to create functioning AI. 
