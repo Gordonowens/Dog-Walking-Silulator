@@ -48,7 +48,7 @@ playermoveactors =  ['BBBBBBB',
                       'B..B..B',
                       'BP.B..B',
                       'BQ..Q.B',
-                      'B.....B',
+                      'B..D..B',
                       'B..D..B',
                       'BBBBBBB']
 

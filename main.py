@@ -40,8 +40,71 @@ def createTerrain(terrain, i, j, gap, spriteSheets):
     elif (terrain == "R"):
         return RoughGround(i, j, gap, spriteSheets[5])
 
-def createActor(actor):
-    pass
+
+
+def createActor(actor, i, j , gap, gameData, clock):
+
+    if (actor == "B"):
+        actor = Barrier(i, j, gap, gameData.spriteSets.get('Barrier').image)
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Barriers').append(actor)
+
+
+    elif (actor == "I"):
+        actor = BarrierDown(i, j, gap, gameData)
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Barriers').append(actor)
+
+
+    elif (actor == "-"):
+        actor = BarrierAccross(i, j, gap, gameData)
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Barriers').append(actor)
+
+    # create animal sprite
+    elif (actor == "A"):
+        actor = Animal(i, j, gap, gameData)
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Animals').append(actor)
+
+
+    # create tennis ball sprite
+    elif (actor == "Q"):
+        actor = Ball(i, j, gap, gameData.spriteSets.get('Ball'))
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Items').append(actor)
+        # items.append(node)
+
+        # create Treebottom sprite
+    elif (actor == "t"):
+        actor = TreeTop(i, j, gap, gameData)
+        gameData.spriteGroup.add(actor)
+        # trees.append(node)
+
+    # create Treebottom sprite
+    elif (actor == "T"):
+        actor = TreeBottom(i, j, gap, gameData)
+        gameData.spriteGroup.add(actor)
+        # barriers.append(node)
+        gameData.characters.get('Trees').append(actor)
+
+    # create dog sprite
+    elif (actor == "D"):
+        actor = Dog(i, j, gap, gameData, clock)
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Dogs').append(actor)
+
+    # create squirrel sprite
+    elif (actor == "S"):
+        actor = Squirrel(i, j, gap, gameData)
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Squirrels').append(actor)
+
+    # create player
+    elif (actor == "P"):
+        player = Player(i, j, gap, gameData)
+        gameData.spriteGroup.add(player)
+        gameData.characters.update({'Player': player})
 
 
 
@@ -142,67 +205,9 @@ def make_game(width, spriteSheets, gap, clock, terrain, actors):
             grid[i].append(Node(i, j, gap, len(terrain), gameData.characters))
 
             #create actor
-            #newActor = createActor(actors[j][i], i, j, gap, len(terrain), spriteSheets, spriteGroup, iteractionCharacters, clock, love)
-            if (actors[j][i] == "B"):
-                barrier = Barrier(i, j, gap, gameData.spriteSets.get('Barrier').image)
-                spriteGroup.add(barrier)
-                gameData.characters.get('Barriers').append(barrier)
 
+            newActor = createActor(actors[j][i], i, j, gap, gameData, clock)
 
-
-            elif (actors[j][i] == "I"):
-                node = BarrierDown(i, j, gap, len(terrain), gameData)
-                spriteGroup.add(node)
-                barriers.append(node)
-
-            elif (actors[j][i] == "-"):
-                node = BarrierAccross(i, j, gap, len(terrain), gameData)
-                spriteGroup.add(node)
-                barriers.append(node)
-
-            #create animal sprite
-            elif(actors[j][i] == "A"):
-                node = Animal(i, j, gap, len(terrain), gameData)
-                spriteGroup.add(node)
-                animals.append(node)
-
-            # create tennis ball sprite
-            elif (actors[j][i] == "Q"):
-                node = Ball(i, j, gap, gameData.spriteSets.get('Ball'))
-                spriteGroup.add(node)
-                gameData.characters.get('Items').append(node)
-                #items.append(node)
-
-                # create Treebottom sprite
-            elif (actors[j][i] == "t"):
-                node = TreeTop(i, j, gap, len(terrain), gameData)
-                spriteGroup.add(node)
-                #trees.append(node)
-
-            # create Treebottom sprite
-            elif (actors[j][i] == "T"):
-                node = TreeBottom(i, j, gap, len(terrain), gameData)
-                spriteGroup.add(node)
-                #barriers.append(node)
-                trees.append(node)
-
-            # create dog sprite
-            elif (actors[j][i] == "D"):
-                node = Dog(i, j, gap, gameData, clock)
-                spriteGroup.add(node)
-                gameData.characters.get('Dogs').append(node)
-
-            # create squirrel sprite
-            elif (actors[j][i] == "S"):
-                node = Squirrel(i, j, gap, len(terrain), gameData)
-                spriteGroup.add(node)
-                squirrels.append(node)
-
-            #create player
-            elif (actors[j][i] == "P"):
-                player = Player(i, j, gap, gameData)
-                spriteGroup.add(player)
-                gameData.characters.update({'Player': player})
 
     #update gamegrid object
     gameGrid.setGrid(grid)
