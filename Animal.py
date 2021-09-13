@@ -17,11 +17,12 @@ follow: if player is over 5 paces away move to the player
 flee: if player is 5 paces away, move away
 '''
 class Animal(BasicSprite):
-    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters):
+    def __init__(self, row, col, width, grid, spriteSheet, spriteGroup, characters):
 
+        BasicSprite.__init__(self, row, col, width)
         self.spriteSets = spriteSheet
         self.image = self.spriteSets.get('Stay Right')[0]
-        BasicSprite.__init__(self, row, col, width, total_rows, self.image)
+
         self._layer = 3
 
 
@@ -52,8 +53,6 @@ class Animal(BasicSprite):
     def animateAnimals(self):
         if len(self.animationCells) > 0:
             self.image = self.animationCells.pop()
-
-
 
     def makeFleeState(self):
 

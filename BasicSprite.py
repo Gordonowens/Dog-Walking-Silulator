@@ -3,12 +3,12 @@ from pygame import *
 
 
 class BasicSprite(pygame.sprite.Sprite):
-    def __init__(self, row, col, width, total_rows, spriteSheet):
+    def __init__(self, row, col, width):
 
         pygame.sprite.Sprite.__init__(self)
         # variables for sprite
         self._layer = 0
-        self.image = spriteSheet
+        self.image = pygame.Surface([30, 30])
         self.rect = self.image.get_rect()
         self.x = row * width
         self.y = col * width
@@ -20,7 +20,6 @@ class BasicSprite(pygame.sprite.Sprite):
         self.pos = vec((self.x, self.y))
         self.row = row
         self.col = col
-        self.total_rows = total_rows
 
     def get_pos(self):
         return self.row, self.col

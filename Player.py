@@ -14,15 +14,15 @@ this class runs player controls
 all inputs from user are handled by this class
 '''
 class Player(Animal):
-    def __init__(self, grid, row, col, width, total_rows, spriteSheet, spriteGroup, characters):
 
-        Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters)
+    def __init__(self,  row, col, width, gameData):
+
+        Animal.__init__(self, row, col, width, gameData.gameGrid, gameData.spriteSets.get('Player'), gameData.spriteGroup, gameData.characters)
         #sprite layer
         self._layer = 2
-        self.grid = grid
         self.items = []
-        self.spriteGroup = spriteGroup
-        self.characters = characters
+        self.spriteGroup = gameData.spriteGroup
+        self.characters = gameData.characters
         self.playerCommand = ''
 
     def throw(self, node):

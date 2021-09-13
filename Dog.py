@@ -6,22 +6,24 @@ from Heart import *
 
 class Dog(Animal):
 
-    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters, clock, heart):
+    def __init__(self, row, col, width, gameData, clock):
 
-        Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters)
+
+        Animal.__init__(self, row, col, width,  gameData.gameGrid, gameData.spriteSets.get('Dog'), gameData.spriteGroup, gameData.characters)
 
         self.recordTime = 0
         self.coolDown = 5
         self.coolDownTimer = 5
         self.goal = None
         self.items = []
-        self.characters = characters
+        self.characters = gameData.characters
         self.barriers = ['Trees', 'Barriers']
         self.animalState = 'stay'
         self.items = [Poo()]
         self.clock = clock
         self.pooTime = 0
-        self.heart = heart
+        self.heart = Heart(1, 1, 30, pygame.image.load('img/love.png').convert())
+        #self.heart = gameData.spriteSets.get('Heart')
 
 
 
@@ -306,9 +308,10 @@ class Dog(Animal):
             self.animationCells = self.spriteSets.get('Love').copy()
             self.movementSprite = 'Love'
             # create heart
-            heart = Heart(self.row + 1, self.col, 30, 10, pygame.image.load('img/love.png').convert())
+            self.heart.updatePosition(((self.row + 1), self.col))
+            #heart = Heart(, self.heart)
             # add heart to
-            self.spriteGroup.add(heart)
+            self.spriteGroup.add(self.heart)
 
         elif self.movementSprite == 'Love' and len(self.animationCells) == 0:
             self.animalState = 'stay'

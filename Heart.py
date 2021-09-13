@@ -2,11 +2,13 @@ from BasicSprite import *
 
 class Heart(BasicSprite):
 
-    def __init__(self, row, col, width, total_rows, spriteSheet):
+    def __init__(self, row, col, width, spriteSheet):
 
+        BasicSprite.__init__(self, row, col, width)
         self.spriteSet =  self.createSpriteSet(spriteSheet)
+        self.animationSet = self.spriteSet.copy()
         self.image =  self.spriteSet[0]
-        BasicSprite.__init__(self, row, col, width, total_rows, self.image)
+
         self._layer = 6
         self.coolDown = 7
 
@@ -28,14 +30,16 @@ class Heart(BasicSprite):
     def update(self):
 
         self.coolDown = self.coolDown - 1
-        if len(self.spriteSet) == 0:
+        if len(self.animationSet) == 0:
             self.kill()
+            self.animationSet = self.spriteSet.copy()
+            self.coolDown = 7
 
 
 
         elif self.coolDown == 0:
 
-            self.image = self.spriteSet.pop()
+            self.image = self.animationSet.pop()
             self.coolDown = 7
 
 

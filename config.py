@@ -44,14 +44,22 @@ testdog =    ['BBBBB',
            'BP..B',
            'BBBBB']
 
-playermove =  ['BBBBBBB',
-               'BP.B..B',
-               'B..B..B',
-               'BQ....B',
-               'B.....B',
-               'B.....B',
-               'BBBBBBB']
+playermoveactors =  ['BBBBBBB',
+                      'B..B..B',
+                      'BP.B..B',
+                      'BQ..Q.B',
+                      'B.....B',
+                      'B..D..B',
+                      'BBBBBBB']
 
+
+playermoveterrain =  ['.......',
+                      '.......',
+                      '.RRRRR.',
+                      '.......',
+                      '.......',
+                      '.......',
+                      '.......']
 
 playball =  ['BBBBBBBBBBBBBB',
              'BP...........B',
