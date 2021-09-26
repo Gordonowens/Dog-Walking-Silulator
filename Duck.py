@@ -196,6 +196,7 @@ class Duck(Squirrel):
             else:
                 self._layer = 0
                 self.come(bestTree)
+                print('hello')
 
     def hideInWaterState(self):
 

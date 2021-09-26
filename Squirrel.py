@@ -1,4 +1,4 @@
-from Dog import *
+from Animal import *
 
 class Squirrel(Animal):
 
@@ -7,11 +7,12 @@ class Squirrel(Animal):
         Animal.__init__(self, row, col, width, gameData.gameGrid, gameData.spriteSets.get('Squirrel'),
                         gameData.spriteGroup, gameData.characters)
         self.animalState = 'sniff'
-        self.barriers = ['Trees', 'Barriers']
+        self.barriers = ['Barriers']
         self.characterFlee = ['Dogs']
 
 
     def update(self):
+        print(self.animalState)
         self.coolDownTimer = self.coolDownTimer - 1
         if self.animalState == 'sniff':
             self.sniffState()
@@ -38,8 +39,6 @@ class Squirrel(Animal):
             self.coolDownTimer = self.coolDown
             self.movement()
 
-
-
         # create path
         elif len(self.path) <= 0:
 
@@ -59,6 +58,7 @@ class Squirrel(Animal):
             else:
                 self._layer = 0
                 self.come(bestTree)
+                print('hello')
 
     def hideInTreeState(self):
 
