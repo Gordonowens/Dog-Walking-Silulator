@@ -12,7 +12,6 @@ class Squirrel(Animal):
 
 
     def update(self):
-        print(self.animalState)
         self.coolDownTimer = self.coolDownTimer - 1
         if self.animalState == 'sniff':
             self.sniffState()
@@ -58,7 +57,6 @@ class Squirrel(Animal):
             else:
                 self._layer = 0
                 self.come(bestTree)
-                print('hello')
 
     def hideInTreeState(self):
 

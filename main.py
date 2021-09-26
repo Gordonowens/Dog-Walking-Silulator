@@ -33,6 +33,7 @@ from Bread import *
 from BlackBarrier import *
 from BarrierDownSprite import *
 from BarrierAccrossSprite import *
+from Flower import *
 
 
 
@@ -49,6 +50,9 @@ def createTerrain(terrain, i, j, gap):
 
     elif (terrain == "R"):
         return RoughGround(i, j, gap, terrainSpriteSheet)
+
+    elif (terrain == "F"):
+        return Flower(i, j, gap, terrainSpriteSheet)
 
 
 def createActor(actor, i, j , gap, gameData, clock):

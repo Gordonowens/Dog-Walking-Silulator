@@ -33,7 +33,7 @@ class Duck(Squirrel):
 
     def sniffState(self):
         #if person is close by change state to go towards tree
-        if self.checkEnemyClose(5):
+        if self.checkEnemyClose(8):
             self.animalState = 'go towards water'
             self.stateReset()
 
@@ -45,13 +45,18 @@ class Duck(Squirrel):
             self.animalState = 'go towards water'
             self.stateReset()
 
-        elif self.coolDownTimer <= -40:
+        elif self.coolDownTimer <= -60:
             self.randomMove()
             self.movement()
             self.coolDownTimer = self.coolDown
 
     def goTowardsFoodState(self):
-        if not self.checkFoodClose(5):
+
+        if self.checkEnemyClose(5):
+            self.animalState = 'go towards water'
+            self.stateReset()
+
+        elif not self.checkFoodClose(5):
             self.animalState = 'sniff'
             self.stateReset()
 
@@ -166,7 +171,7 @@ class Duck(Squirrel):
                 self.path.append(nextNode)
 
     def goTowardsWater(self):
-        if not self.checkEnemyClose(5) and self.checkCloseToWater(self):
+        if not self.checkEnemyClose(8) and self.checkCloseToWater(self):
             self.animalState = 'sniff'
             self.stateReset()
             self._layer = 3
@@ -201,7 +206,7 @@ class Duck(Squirrel):
     def hideInWaterState(self):
 
         #chck if player is gone and enough time has passed
-        if not self.checkEnemyClose(6) and self.coolDownTimer < -20:
+        if not self.checkEnemyClose(10) and self.coolDownTimer < -20:
             self.animalState = 'sniff'
             self.stateReset()
             self._layer = 3
