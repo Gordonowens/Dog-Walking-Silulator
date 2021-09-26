@@ -6,14 +6,14 @@ from Heart import *
 
 class Dog(Animal):
 
-    def __init__(self, row, col, width, gameData, clock):
+    def __init__(self, row, col, width, gameData, clock, spritesheet):
 
 
-        Animal.__init__(self, row, col, width,  gameData.gameGrid, gameData.spriteSets.get('Dog'), gameData.spriteGroup, gameData.characters)
+        Animal.__init__(self, row, col, width,  gameData.gameGrid, spritesheet, gameData.spriteGroup, gameData.characters)
 
         self.recordTime = 0
-        self.coolDown = 5
-        self.coolDownTimer = 5
+        self.coolDown = 7
+        self.coolDownTimer = 7
         self.goal = None
         self.items = []
         self.characters = gameData.characters
@@ -22,6 +22,7 @@ class Dog(Animal):
         self.clock = clock
         self.pooTime = 0
         self.heart = Heart(1, 1, 30, pygame.image.load('img/love.png').convert())
+        self.weights = [['Flower', 10], ['Rough', 10], ['Ground', 4], ['Path', 1]]
 
 
 
@@ -210,6 +211,7 @@ class Dog(Animal):
         elif len(self.path) > 0 and self.coolDownTimer <= 2:
             self.coolDownTimer = self.coolDown
             self.movement()
+
 
         elif self.get_pos() == self.goal.get_pos():
             self.pickUp()

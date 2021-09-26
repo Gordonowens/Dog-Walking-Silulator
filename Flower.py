@@ -8,7 +8,8 @@ class Flower(BasicSprite):
         self._layer = 1
         self.image = self.createSprite(spriteSheet, 51, self.selectRandomFlower(), 16, 16, WHITE)
         self.image = pygame.transform.scale(self.image, (GAP, GAP))
-        self.weight = 10
+        self.weight = 1
+        self.type = 'Flower'
 
 
     def selectRandomFlower(self):

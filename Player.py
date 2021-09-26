@@ -99,8 +99,6 @@ class Player(Animal):
                 if not self.checkNodes((self.row, self.col - 1)):
                     self.movementSprite = 'Up'
                     self.updatePosition(nextNode)
-
-
             #down
             elif self.playerCommand == 'down':
                 nextNode = [self.row, self.col + 1]

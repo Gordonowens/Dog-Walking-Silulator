@@ -2,7 +2,7 @@ from config import *
 from pygame import *
 class Node():
 
-	def __init__(self, row, col, width, total_rows, characters, w = 1):
+	def __init__(self, row, col, width, total_rows, characters, groundType, w = 1):
 
 		#variables for game grid
 		self.row = row
@@ -14,6 +14,7 @@ class Node():
 		self.neighbors = []
 		self.characters = characters
 		self.w = w
+		self.groundType = groundType
 
 	def get_pos(self):
 		return self.row, self.col
@@ -87,6 +88,14 @@ class Node():
 		#left
 		if self.col > 0 and not self.checkNodes(barrierTypes, (self.row, self.col - 1)):
 			self.neighbors.append(grid[self.row][self.col - 1])
+
+	def update_weights(self, weights):
+
+		for weight in weights:
+			if self.groundType == weight[0]:
+
+				self.w = weight[1]
+
 
 	def __lt__(self, other):
 		'''

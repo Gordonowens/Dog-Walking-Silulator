@@ -9,7 +9,8 @@ class RoughGround(BasicSprite):
         self.ground = self.getGround()
         self.image = self.createSprite(spriteSheet, self.ground[0], self.ground[1], 16, 16, WHITE)
         self.image = pygame.transform.scale(self.image, (GAP, GAP))
-        self.weight = 10
+        self.weight = 1
+        self.type = 'Rough'
 
 
     def getGround(self):

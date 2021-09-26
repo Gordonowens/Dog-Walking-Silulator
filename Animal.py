@@ -41,6 +41,7 @@ class Animal(BasicSprite):
         self.movementSprite = 'Left'
 
         self.barriers = ['Barriers', 'Trees', 'Water']
+        self.weights = [['Flower', 1], ['Rough', 1], ['Ground', 1], ['Path', 1]]
 
     def updateSprite(self):
         if self.animationCount > len(self.spriteSets.get(self.movementSprite)) - 1:
@@ -162,6 +163,7 @@ class Animal(BasicSprite):
         for row in self.grid.getGrid():
             for node in row:
                 node.update_neighbors(self.grid.getGrid(), self.barriers)
+                node.update_weights(self.weights)
 
         self.path = algorithm(self.grid.getGrid(), self.grid.getGrid()[self.row][self.col], self.grid.getGrid()[toNode.row][toNode.col])
 

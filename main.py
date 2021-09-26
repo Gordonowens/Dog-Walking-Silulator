@@ -34,6 +34,8 @@ from BlackBarrier import *
 from BarrierDownSprite import *
 from BarrierAccrossSprite import *
 from Flower import *
+from DogSprite2 import *
+from Dog2 import *
 
 
 
@@ -70,6 +72,7 @@ def createActor(actor, i, j , gap, gameData, clock):
 
     elif (actor == "I"):
         actor = BarrierDown(i, j, gap, gameData.spriteSets.get('Barrier Down').image)
+
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Barriers').append(actor)
 
@@ -117,7 +120,13 @@ def createActor(actor, i, j , gap, gameData, clock):
 
     # create dog sprite
     elif (actor == "D"):
-        actor = Dog(i, j, gap, gameData, clock)
+        actor = Dog(i, j, gap, gameData, clock, gameData.spriteSets.get('Dog'))
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Dogs').append(actor)
+
+        # create dog sprite
+    elif (actor == "d"):
+        actor = Dog2(i, j, gap, gameData, clock)
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Dogs').append(actor)
 
@@ -162,6 +171,7 @@ def createSpriteSets():
     squirrelSprite = SquirrellSprite(pygame.image.load('img/squirrel.png').convert())
     manSprite = HumanManSprite(pygame.image.load('img/player.png').convert())
     dogSprite = DogSprite(pygame.image.load('img/shibu inu sprite sheet.jpeg').convert())
+    dogSprite2 = DogSprite2(pygame.image.load('img/doggo sprite sheet.png').convert())
     duckSprite = DuckSprite(pygame.image.load('img/ducks.png').convert())
 
     #create single sprite for actors dont need animation
@@ -199,7 +209,7 @@ def createSpriteSets():
     treeBottom = createSpriteSurface(pygame.image.load('img/terrain2.png').convert(), 221, 187, 16, 16, WHITE)
     treeBottom = pygame.transform.scale(treeBottom, (30, 30))
 
-    spriteSets = {'Ball': ball, 'Dog': dogSprite.dogSpriteSheet, 'Player': manSprite.humanSpriteSheet,
+    spriteSets = {'Ball': ball, 'Dog': dogSprite.dogSpriteSheet, 'Dog2': dogSprite2.dogSpriteSheet, 'Player': manSprite.humanSpriteSheet,
                   'Squirrel': squirrelSprite.squirrelSpriteSheet, 'Heart': love, 'Barrier': barrierSprite, 'Water': waterSprite,
                   'Tree Top': treeTopSprite, 'Tree Bottom': treeBottom, 'Duck': duckSprite.duckSpriteSheet, 'Bread': bread, 'Bread Scraps': breadScraps,
                   'Barrier Down': barrierDown, 'Barrier Accross': barrierAccross}
@@ -262,7 +272,7 @@ def make_game(gap, clock, terrain, actors):
             gameData.characters.get('Ground').append(newTerrain)
 
             # append a general node to gamegrid for pathfinding
-            grid[i].append(Node(i, j, gap, len(terrain), gameData.characters, newTerrain.weight))
+            grid[i].append(Node(i, j, gap, len(terrain), gameData.characters, newTerrain.type, newTerrain.weight ))
 
             #create actor
             createActor(actors[j][i], i, j, gap, gameData, clock)
