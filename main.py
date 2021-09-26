@@ -25,21 +25,30 @@ from HumanManSprite import *
 from DogSprite import *
 from Heart import *
 from BarrierSprite import *
+from WaterSprite import *
+from Water import *
+from Duck import *
+from DuckSprite import *
+from Bread import *
+from BlackBarrier import *
+from BarrierDownSprite import *
+from BarrierAccrossSprite import *
 
 
-def createTerrain(terrain, i, j, gap, spriteSheets):
+
+def createTerrain(terrain, i, j, gap):
+
+    terrainSpriteSheet = pygame.image.load('img/terrain2.png').convert()
     if (terrain == '.'):
         # create a ground sprite for each tile
-        return Ground(i, j, gap, len(terrain), spriteSheets[5])
-
+        return Ground(i, j, gap, terrainSpriteSheet)
 
     elif (terrain == "G"):
-        return GoalTile(i, j, gap, len(terrain), spriteSheets[5])
+        return GoalTile(i, j, gap, terrainSpriteSheet)
 
 
     elif (terrain == "R"):
-        return RoughGround(i, j, gap, spriteSheets[5])
-
+        return RoughGround(i, j, gap, terrainSpriteSheet)
 
 
 def createActor(actor, i, j , gap, gameData, clock):
@@ -49,15 +58,24 @@ def createActor(actor, i, j , gap, gameData, clock):
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Barriers').append(actor)
 
-
-    elif (actor == "I"):
-        actor = BarrierDown(i, j, gap, gameData)
+    elif (actor == ","):
+        actor = BlackBarrier(i, j, gap)
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Barriers').append(actor)
 
 
+    elif (actor == "I"):
+        actor = BarrierDown(i, j, gap, gameData.spriteSets.get('Barrier Down').image)
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Barriers').append(actor)
+
+    elif (actor == "W"):
+        actor = Water(i, j, gap, gameData.spriteSets.get('Water'))
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Water').append(actor)
+
     elif (actor == "-"):
-        actor = BarrierAccross(i, j, gap, gameData)
+        actor = BarrierAccross(i, j, gap, gameData.spriteSets.get('Barrier Accross').image)
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Barriers').append(actor)
 
@@ -73,17 +91,22 @@ def createActor(actor, i, j , gap, gameData, clock):
         actor = Ball(i, j, gap, gameData.spriteSets.get('Ball'))
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Items').append(actor)
-        # items.append(node)
+
+        # create tennis ball sprite
+    elif (actor == "b"):
+        actor = Bread(i, j, gap, gameData.spriteSets.get('Bread'))
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Items').append(actor)
 
         # create Treebottom sprite
     elif (actor == "t"):
-        actor = TreeTop(i, j, gap, gameData)
+        actor = TreeTop(i, j, gap, gameData.spriteSets.get('Tree Top'))
         gameData.spriteGroup.add(actor)
         # trees.append(node)
 
     # create Treebottom sprite
     elif (actor == "T"):
-        actor = TreeBottom(i, j, gap, gameData)
+        actor = TreeBottom(i, j, gap, gameData.spriteSets.get('Tree Bottom'))
         gameData.spriteGroup.add(actor)
         # barriers.append(node)
         gameData.characters.get('Trees').append(actor)
@@ -100,15 +123,17 @@ def createActor(actor, i, j , gap, gameData, clock):
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Squirrels').append(actor)
 
+    # create squirrel sprite
+    elif (actor == "N"):
+        actor = Duck(i, j, gap, gameData)
+        gameData.spriteGroup.add(actor)
+        gameData.characters.get('Ducks').append(actor)
+
     # create player
     elif (actor == "P"):
         player = Player(i, j, gap, gameData)
         gameData.spriteGroup.add(player)
         gameData.characters.update({'Player': player})
-
-
-
-
 
 def createSpriteSurface(spriteSheet, x, y, width, height, background = BLACK):
     '''
@@ -133,6 +158,7 @@ def createSpriteSets():
     squirrelSprite = SquirrellSprite(pygame.image.load('img/squirrel.png').convert())
     manSprite = HumanManSprite(pygame.image.load('img/player.png').convert())
     dogSprite = DogSprite(pygame.image.load('img/shibu inu sprite sheet.jpeg').convert())
+    duckSprite = DuckSprite(pygame.image.load('img/ducks.png').convert())
 
     #create single sprite for actors dont need animation
 
@@ -144,9 +170,35 @@ def createSpriteSets():
     ball.set_colorkey(BLACK)
     ball = pygame.transform.scale(ball, (10, 10))
 
-    barrierSprite = BarrierSprite( 0, 0, 30, pygame.image.load('img/terrain.png').convert())
+    breadScraps = pygame.Surface([30, 30])
+    breadScraps.blit(pygame.image.load('img/terrain.png').convert(), (0, 0), (929, 578, 29, 29))
+    breadScraps.set_colorkey(BLACK)
+    breadScraps = pygame.transform.scale(breadScraps, (15, 15))
+
+    bread = pygame.Surface([10, 5])
+    bread.blit(pygame.image.load('img/terrain2.png').convert(), (0, 0), (819, 125, 10, 5))
+    bread.set_colorkey(WHITE)
+    bread = pygame.transform.scale(bread, (20, 15))
+
+    barrierSprite = BarrierSprite(0, 0, 30, pygame.image.load('img/terrain.png').convert())
+    barrierDown = BarrierDownSprite(0, 0, 30, pygame.image.load('img/terrain2.png').convert())
+    barrierAccross = BarrierAccrossSprite(0, 0, 30, pygame.image.load('img/terrain2.png').convert())
+
+    waterSprite = pygame.Surface([16, 16])
+    waterSprite.blit(pygame.image.load('img/terrain2.png').convert(), (0, 0), (51, 17, 16, 16))
+    waterSprite.set_colorkey(WHITE)
+    waterSprite = pygame.transform.scale(waterSprite, (30, 30))
+
+    treeTopSprite = createSpriteSurface(pygame.image.load('img/terrain2.png').convert(), 221, 170, 16, 16, WHITE)
+    treeTopSprite = pygame.transform.scale(treeTopSprite, (30, 30))
+
+    treeBottom = createSpriteSurface(pygame.image.load('img/terrain2.png').convert(), 221, 187, 16, 16, WHITE)
+    treeBottom = pygame.transform.scale(treeBottom, (30, 30))
+
     spriteSets = {'Ball': ball, 'Dog': dogSprite.dogSpriteSheet, 'Player': manSprite.humanSpriteSheet,
-                  'Squirrel': squirrelSprite, 'Heart': love, 'Barrier': barrierSprite}
+                  'Squirrel': squirrelSprite.squirrelSpriteSheet, 'Heart': love, 'Barrier': barrierSprite, 'Water': waterSprite,
+                  'Tree Top': treeTopSprite, 'Tree Bottom': treeBottom, 'Duck': duckSprite.duckSpriteSheet, 'Bread': bread, 'Bread Scraps': breadScraps,
+                  'Barrier Down': barrierDown, 'Barrier Accross': barrierAccross}
 
     return spriteSets
 
@@ -160,6 +212,7 @@ def createIterationCharacters():
     squirrels = []
     ground = []
     player = None
+    water = []
 
     iteractionCharacters = {}
 
@@ -169,11 +222,14 @@ def createIterationCharacters():
     iteractionCharacters.update({'Items': items})
     iteractionCharacters.update({'Trees': trees})
     iteractionCharacters.update({'Ground': ground})
+    iteractionCharacters.update({'Water': water})
+    iteractionCharacters.update({'Squirrels': squirrels})
+    iteractionCharacters.update({'Ducks': []})
 
 
     return iteractionCharacters
 
-def make_game(width, spriteSheets, gap, clock, terrain, actors):
+def make_game(gap, clock, terrain, actors):
     '''
     this function iterates through the tilemap and generates sprites
     and creates game grid for pathfinding
@@ -196,18 +252,16 @@ def make_game(width, spriteSheets, gap, clock, terrain, actors):
         for j in range(len(terrain)):
 
             #create terrain
-            newTerrain = createTerrain(terrain[j][i], i, j, gap, spriteSheets)
+            newTerrain = createTerrain(terrain[j][i], i, j, gap)
             spriteGroup.add(newTerrain)
 
             gameData.characters.get('Ground').append(newTerrain)
 
             # append a general node to gamegrid for pathfinding
-            grid[i].append(Node(i, j, gap, len(terrain), gameData.characters))
+            grid[i].append(Node(i, j, gap, len(terrain), gameData.characters, newTerrain.weight))
 
             #create actor
-
-            newActor = createActor(actors[j][i], i, j, gap, gameData, clock)
-
+            createActor(actors[j][i], i, j, gap, gameData, clock)
 
     #update gamegrid object
     gameGrid.setGrid(grid)
@@ -265,51 +319,45 @@ def keyEvent(game):
             game.characters.get('Player').playerCommand = ''
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
+
             pos = pygame.mouse.get_pos()
+            #print(event.button)
+            if event.button == 1:
 
-            for item in game.characters.get('Items'):
-                if item.rect.collidepoint(pos) == 1:
-                    game.characters.get('Player').pickUp()
-                    return
+                for item in game.characters.get('Items'):
+                    if item.rect.collidepoint(pos) == 1:
+                        game.characters.get('Player').pickUp()
+                        return
 
-            for ground in game.characters.get('Ground'):
-                if ground.rect.collidepoint(pos) == 1:
-                    game.characters.get('Player').throw(ground)
+                for ground in game.characters.get('Ground'):
+                    if ground.rect.collidepoint(pos) == 1:
+                        game.characters.get('Player').throw(ground)
 
 
 
-            for dog in game.characters.get('Dogs'):
-                if dog.rect.collidepoint(pos) == 1:
-                    dog.animalState = 'love'
-                    print('goood boy')
-                    return
+                for dog in game.characters.get('Dogs'):
+                    if dog.rect.collidepoint(pos) == 1:
+                        dog.animalState = 'love'
+                        print('goood boy')
+                        return
+
+            elif event.button == 3:
+                for ground in game.characters.get('Ground'):
+                    if ground.rect.collidepoint(pos) == 1:
+
+                        game.characters.get('Player').throwBread(ground)
+
 
 def main():
     #initialise pygam
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, WIDTH))
 
-    #load in the sprite sheets
-    spriteSheets = []
-    spriteSheets.append(pygame.image.load('img/player.png').convert())
-    spriteSheets.append(pygame.image.load('img/terrain.png').convert())
-    spriteSheets.append(pygame.image.load('img/shibu inu sprite sheet.jpeg').convert())
-    spriteSheets.append(pygame.image.load('img/sheet_equipment.png').convert())
-    spriteSheets.append(pygame.image.load('img/squirrel.png').convert())
-    spriteSheets.append(pygame.image.load('img/terrain2.png').convert())
-    spriteSheets.append(pygame.image.load('img/love.png').convert())
-
-
     #set the game clock
     clock = pygame.time.Clock()
 
-
-
-    #create group to control updating and drawing of sprites
-
-
     #create grid, creates all the game sprites and characters
-    game = make_game(WIDTH, spriteSheets, GAP, clock, playermoveterrain, playermoveactors)
+    game = make_game(GAP, clock, pondterrain, pondactors)
 
 
     #game loop for game 1

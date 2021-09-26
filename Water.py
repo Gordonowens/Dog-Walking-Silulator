@@ -1,9 +1,12 @@
 from BasicSprite import *
 
-class BarrierAccross(BasicSprite):
+class Water(BasicSprite):
 
     def __init__(self, row, col, width, sprite):
         BasicSprite.__init__(self, row, col, width)
-
+        self._layer = 2
         self.image = sprite
-        self.layer = 2
+        pygame.transform.scale(self.image, (GAP, GAP))
+
+
+

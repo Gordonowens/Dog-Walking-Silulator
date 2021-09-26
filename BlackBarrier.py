@@ -1,14 +1,10 @@
 from BasicSprite import *
 
 
-class Barrier(BasicSprite):
+class BlackBarrier(BasicSprite):
 
-    def __init__(self, row, col, width, sprite):
+    def __init__(self, row, col, width):
         BasicSprite.__init__(self, row, col, width)
-        self.image = sprite
         self._layer = 2
-
-
-
         self.color = BLACK
         self.state = 'barrier'

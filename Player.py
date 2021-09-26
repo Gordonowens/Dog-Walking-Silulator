@@ -8,6 +8,7 @@ import sys
 from Ball import *
 from Animal import *
 import random
+from Bread import *
 
 '''
 this class runs player controls
@@ -19,11 +20,15 @@ class Player(Animal):
 
         Animal.__init__(self, row, col, width, gameData.gameGrid, gameData.spriteSets.get('Player'), gameData.spriteGroup, gameData.characters)
         #sprite layer
-        self._layer = 2
+        self._layer = 3
         self.items = []
         self.spriteGroup = gameData.spriteGroup
         self.characters = gameData.characters
+        self.gameData = gameData
+        self.breadCount = 0
+
         self.playerCommand = ''
+
 
     def throw(self, node):
 
@@ -48,6 +53,23 @@ class Player(Animal):
                     for dog in self.characters.get('Dogs'):
                         dog.goal = item
                         dog.animalState = "fetch"
+
+
+
+    def throwBread(self, node):
+
+        #check player has ball
+        for i, item in enumerate(self.items):
+            if isinstance(item, Bread):
+
+                if not self.checkNodes(node.get_pos()) and node.get_pos() != self.get_pos():
+
+                    self.dropItem(node, Bread(node.row, node.col, 30, self.gameData.spriteSets.get('Bread Scraps')))
+                    self.breadCount = self.breadCount + 1
+                    if self.breadCount > 10:
+                        self.items.pop(i)
+                    #self.playerCommand = 'throw'
+
 
     def dropItem(self, node, item):
 

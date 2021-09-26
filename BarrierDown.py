@@ -1,10 +1,10 @@
-from Barrier import *
+from BasicSprite import *
 
-class BarrierDown(Barrier):
+class BarrierDown(BasicSprite):
 
-    def __init__(self, row, col, width, total_rows, spriteSheet):
-        Barrier.__init__(self, row, col, width, total_rows, spriteSheet)
+    def __init__(self, row, col, width, sprite):
+        BasicSprite.__init__(self, row, col, width)
+        self.image = sprite
+        self._layer = 2
 
-        self.image = self.createSprite(spriteSheet, 862, 391, 16, 16, WHITE)
-        self.image = pygame.transform.scale(self.image, (30, 30))
-        #self.color = BLACK
+

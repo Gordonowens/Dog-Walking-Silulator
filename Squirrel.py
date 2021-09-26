@@ -2,9 +2,10 @@ from Dog import *
 
 class Squirrel(Animal):
 
-    def __init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters):
+    def __init__(self, row, col, width, gameData):
 
-        Animal.__init__(self, row, col, width, total_rows, grid, spriteSheet, spriteGroup, characters)
+        Animal.__init__(self, row, col, width, gameData.gameGrid, gameData.spriteSets.get('Squirrel'),
+                        gameData.spriteGroup, gameData.characters)
         self.animalState = 'sniff'
         self.barriers = ['Trees', 'Barriers']
         self.characterFlee = ['Dogs']

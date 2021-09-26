@@ -40,7 +40,7 @@ class Animal(BasicSprite):
         self.animationCells = []
         self.movementSprite = 'Left'
 
-        self.barriers = ['Barriers', 'Trees']
+        self.barriers = ['Barriers', 'Trees', 'Water']
 
     def updateSprite(self):
         if self.animationCount > len(self.spriteSets.get(self.movementSprite)) - 1:

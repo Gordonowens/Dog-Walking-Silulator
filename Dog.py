@@ -17,13 +17,12 @@ class Dog(Animal):
         self.goal = None
         self.items = []
         self.characters = gameData.characters
-        self.barriers = ['Trees', 'Barriers']
         self.animalState = 'stay'
         self.items = [Poo()]
         self.clock = clock
         self.pooTime = 0
         self.heart = Heart(1, 1, 30, pygame.image.load('img/love.png').convert())
-        #self.heart = gameData.spriteSets.get('Heart')
+
 
 
 
