@@ -40,10 +40,18 @@ from Dog2 import *
 
 
 def createTerrain(terrain, i, j, gap):
+    '''
+
+    :param terrain: char
+    :param i: number of rows
+    :param j: number of gaps
+    :param gap: returns a terrain type either Ground, goaltile, roughground or flower
+    :return:
+    '''
 
     terrainSpriteSheet = pygame.image.load('img/terrain2.png').convert()
+
     if (terrain == '.'):
-        # create a ground sprite for each tile
         return Ground(i, j, gap, terrainSpriteSheet)
 
     elif (terrain == "G"):
@@ -58,6 +66,16 @@ def createTerrain(terrain, i, j, gap):
 
 
 def createActor(actor, i, j , gap, gameData, clock):
+    '''
+
+    :param actor: char
+    :param i: int number of rows
+    :param j: int number of columns
+    :param gap: int number of pixels
+    :param gameData: Game object representing game data
+    :param clock:
+
+    '''
 
     if (actor == "B"):
         actor = Barrier(i, j, gap, gameData.spriteSets.get('Barrier').image)
@@ -72,7 +90,6 @@ def createActor(actor, i, j , gap, gameData, clock):
 
     elif (actor == "I"):
         actor = BarrierDown(i, j, gap, gameData.spriteSets.get('Barrier Down').image)
-
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Barriers').append(actor)
 
@@ -86,57 +103,46 @@ def createActor(actor, i, j , gap, gameData, clock):
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Barriers').append(actor)
 
-    # create animal sprite
     elif (actor == "A"):
         actor = Animal(i, j, gap, gameData)
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Animals').append(actor)
 
-
-    # create tennis ball sprite
     elif (actor == "Q"):
         actor = Ball(i, j, gap, gameData.spriteSets.get('Ball'))
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Items').append(actor)
 
-        # create tennis ball sprite
     elif (actor == "b"):
         actor = Bread(i, j, gap, gameData.spriteSets.get('Bread'))
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Items').append(actor)
 
-        # create Treebottom sprite
     elif (actor == "t"):
         actor = TreeTop(i, j, gap, gameData.spriteSets.get('Tree Top'))
         gameData.spriteGroup.add(actor)
-        # trees.append(node)
 
-    # create Treebottom sprite
     elif (actor == "T"):
         actor = TreeBottom(i, j, gap, gameData.spriteSets.get('Tree Bottom'))
         gameData.spriteGroup.add(actor)
-        # barriers.append(node)
         gameData.characters.get('Trees').append(actor)
 
-    # create dog sprite
     elif (actor == "D"):
         actor = Dog(i, j, gap, gameData, clock, gameData.spriteSets.get('Dog'))
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Dogs').append(actor)
 
-        # create dog sprite
     elif (actor == "d"):
         actor = Dog2(i, j, gap, gameData, clock)
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Dogs').append(actor)
 
-    # create squirrel sprite
     elif (actor == "S"):
         actor = Squirrel(i, j, gap, gameData)
         gameData.spriteGroup.add(actor)
         gameData.characters.get('Squirrels').append(actor)
 
-    # create squirrel sprite
+    # create squirrel duck
     elif (actor == "N"):
         actor = Duck(i, j, gap, gameData)
         gameData.spriteGroup.add(actor)
@@ -151,12 +157,11 @@ def createActor(actor, i, j , gap, gameData, clock):
 def createSpriteSurface(spriteSheet, x, y, width, height, background = BLACK):
     '''
 
-    :param spriteSheet:
-    :param x:
-    :param y:
-    :param width:
-    :param height:
-    :return:
+    :param spriteSheet: SpriteSheet sprite sheet to cut out sprites from
+    :param x: int x co-ordinates
+    :param y: int y co-ordinates
+    :param width: int width of sprite
+    :param height: int height of sprite
     '''
 
     sprite = pygame.Surface([width, height])
@@ -167,6 +172,11 @@ def createSpriteSurface(spriteSheet, x, y, width, height, background = BLACK):
 
 def createSpriteSets():
 
+    '''
+    this function creates spritesets for use by game actors and terrain
+    :return: returns a dictionary of all the spritessets
+    '''
+
     #create spritesets for animation
     squirrelSprite = SquirrellSprite(pygame.image.load('img/squirrel.png').convert())
     manSprite = HumanManSprite(pygame.image.load('img/player.png').convert())
@@ -174,10 +184,7 @@ def createSpriteSets():
     dogSprite2 = DogSprite2(pygame.image.load('img/doggo sprite sheet.png').convert())
     duckSprite = DuckSprite(pygame.image.load('img/ducks.png').convert())
 
-    #create single sprite for actors dont need animation
-
     love = Heart(1, 1, 30, pygame.image.load('img/love.png').convert())
-
 
     ball = pygame.Surface([18, 18])
     ball.blit(pygame.image.load('img/sheet_equipment.png').convert(), (0, 0), (69, 71, 18, 18))
@@ -217,6 +224,11 @@ def createSpriteSets():
     return spriteSets
 
 def createIterationCharacters():
+
+    '''
+    creates a dictionary of all the actors in the game
+    :return: dictionary of all game actors
+    '''
 
     dogs = []
     barriers = []
@@ -282,17 +294,16 @@ def make_game(gap, clock, terrain, actors):
 
     gameData.gameGrid = gameGrid
 
-
-
     return gameData
 
 def show_score(text, x, y, screen):
-    font = pygame.font.Font('freesansbold.ttf', 18)
+    font = pygame.font.Font('freesansbold.ttf', 13)
     score = font.render(text, True, (255, 255, 255))
     screen.blit(score, (x, y))
 
 
 def keyEvent(game):
+
     for event in pygame.event.get():
 
         if event.type == pygame.QUIT:
@@ -321,40 +332,45 @@ def keyEvent(game):
             elif event.key == pygame.K_SPACE:
                 game.characters.get('Player').playerCommand = 'here boy'
 
+            #ctrl go away
             elif (event.key == pygame.K_LCTRL) or (event.key == pygame.K_RCTRL):
                 game.characters.get('Player').playerCommand = 'go away'
 
+            #s stay
             elif event.key == pygame.K_s:
                 game.characters.get('Player').playerCommand = 'stay'
 
-
-
+        #reset player command to blank
         elif event.type == pygame.KEYUP:
             game.characters.get('Player').playerCommand = ''
 
+        #check mouse button events
         elif event.type == pygame.MOUSEBUTTONDOWN:
 
             pos = pygame.mouse.get_pos()
-            #print(event.button)
+
+            #player left click
             if event.button == 1:
 
+                #pick up item
                 for item in game.characters.get('Items'):
                     if item.rect.collidepoint(pos) == 1:
                         game.characters.get('Player').pickUp()
                         return
 
+                #throw ball
                 for ground in game.characters.get('Ground'):
                     if ground.rect.collidepoint(pos) == 1:
                         game.characters.get('Player').throw(ground)
 
-
-
+                #tell dogs ball has been thrown
                 for dog in game.characters.get('Dogs'):
                     if dog.rect.collidepoint(pos) == 1:
                         dog.animalState = 'love'
                         print('goood boy')
                         return
 
+            #throw bread for ducks
             elif event.button == 3:
                 for ground in game.characters.get('Ground'):
                     if ground.rect.collidepoint(pos) == 1:
@@ -363,7 +379,7 @@ def keyEvent(game):
 
 
 def main():
-    #initialise pygam
+    #initialise pygame
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, WIDTH))
 
@@ -379,13 +395,22 @@ def main():
     while running:
         keyEvent(game)
 
+
         clock.tick(FPS)
         screen.fill(BLACK)
 
+
         game.spriteGroup.update()
         game.spriteGroup.draw(screen)
+        show_score("Use arrow keys to control your character", 660, 480, screen)
+        show_score("Press Space to call the dog", 660, 495, screen)
+        show_score("Left click to pickup the ball", 660, 530, screen)
+        show_score("Left click again to throw the ball", 660, 545, screen)
+        show_score("Left click to pick up bread", 30, 570, screen)
+        show_score("Right click to throw bread", 30, 585, screen)
         pygame.display.update()
         pygame.display.flip()
+
 
 if __name__ == "__main__":
     main()
